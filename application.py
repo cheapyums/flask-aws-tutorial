@@ -13,7 +13,7 @@ from application.models import Data
 from application.forms import EnterDBInfo, RetrieveDBInfo
 
 import qrcode
-from qrcode.image.pure import PymagingImage
+#from qrcode.image.pure import PymagingImage
 import cStringIO
 
 # Elastic Beanstalk initalization
@@ -24,11 +24,8 @@ application.secret_key = 'cC1YCIWOj9GgWspgNEo2'
 
 @application.route("/qr")
 def QRCode():
-
-
-
     img_buf = cStringIO.StringIO()
-    img = qrcode.make('http://www.google.com', image_factory=PymagingImage)
+    img = qrcode.make('http://www.google.com')#, image_factory=PymagingImage)
     img.save(img_buf)
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
