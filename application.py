@@ -7,16 +7,31 @@ Author: Scott Rodkey - rodkeyscott@gmail.com
 Step-by-step tutorial: https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80
 '''
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 from application import db
 from application.models import Data
 from application.forms import EnterDBInfo, RetrieveDBInfo
+
+import qrcode
+from qrcode.image.pure import PymagingImage
+import cStringIO
 
 # Elastic Beanstalk initalization
 application = Flask(__name__)
 application.debug=True
 # change this to your own value
 application.secret_key = 'cC1YCIWOj9GgWspgNEo2'   
+
+@application.route("/qr")
+def QRCode():
+
+
+
+    img_buf = cStringIO.StringIO()
+    img = qrcode.make('http://www.google.com', image_factory=PymagingImage)
+    img.save(img_buf)
+    img_buf.seek(0)
+    return send_file(img_buf, mimetype='image/png')
 
 @application.route('/', methods=['GET', 'POST'])
 @application.route('/index', methods=['GET', 'POST'])
