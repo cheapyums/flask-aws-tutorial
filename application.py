@@ -78,8 +78,12 @@ def quickLogin(restaurant, loginCode):
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
+    print "a"
+    if "restaurant" not in session or "loggedIn" not in session:
+        return "Only restaurants can process award redemptions.  If you are a restaurant, please log in!"
+
     if session["restaurant"] != restaurant or session["loggedIn"] != True:
-        return ""
+        return "Only restaurants can process award redemptions.  If you are a restaurant, please log in!"
 
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
