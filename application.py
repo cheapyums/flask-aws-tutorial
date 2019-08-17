@@ -54,6 +54,7 @@ def QRCode(restaurant, awardCode):
         #Setting # of customers to 5 for now
         awd.customers = 5
         db.session.commit()
+        db.session.close()
         return "Please specify the number of members in your party. (Maxium : {0})  Please note that if you specify more members in your party than the ones that actually visit, the restaurant may refuse to honor your award.".format(off.max_customers)
 
     img_buf = cStringIO.StringIO()
@@ -102,6 +103,8 @@ def redeemOffer(restaurant, awardCode):
         return "This award was redeemed on {0} at {1}.<p>Total discount: {2}%<p>Number of Customers: {3}".format(awd.redemption_ts.date(), awd.redemption_ts.time(), awd.offer_percent, awd.customers)
 
     #Offer seems valid.  Now let us set up all the offer details
+
+    #######CHECK TO SEE IF THE OFFER HAS EXPIRED!!!!!
 
     now = datetime.now().time()
     print "Current Time is {0}".format(now)
