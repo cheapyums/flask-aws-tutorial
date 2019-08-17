@@ -34,6 +34,7 @@ def viewAward(restaurant, awardCode):
         #Setting # of customers to 5 for now
         awd.customers = 5
         db.session.commit()
+        db.session.close()
         return "Please specify the number of members in your party. (Maxium : {0})  Please note that if you specify more members in your party than the ones that actually visit, the restaurant may refuse to honor your award.".format(off.max_customers)
 
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode)
