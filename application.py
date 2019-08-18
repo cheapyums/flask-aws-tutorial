@@ -22,7 +22,7 @@ from app import application
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
-    db.session.begin()
+    db.session.expire_all()
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
 
     if awd is None:
@@ -80,7 +80,7 @@ def viewAward(restaurant, awardCode):
 
 @application.route("/a/<restaurant>/qrcode/<awardCode>")
 def QRCode(restaurant, awardCode):
-    db.session.begin()
+    db.session.expire_all()
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd == None:
         return ""
@@ -100,7 +100,7 @@ def QRCode(restaurant, awardCode):
 
 @application.route("/r/<restaurant>/quicklogin/<loginCode>")
 def quickLogin(restaurant, loginCode):
-    db.session.begin()
+    db.session.expire_all()
     q = Restaurant.query.filter_by(code=restaurant).first()
     if q == None:
         return "The page you are trying to access does not exist!"
@@ -116,7 +116,7 @@ def quickLogin(restaurant, loginCode):
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
-    db.session.begin()
+    db.session.expire_all()
     if "restaurant" not in session or "loggedIn" not in session:
         return "Only restaurants can process award redemptions.  If you are a restaurant, please log in!"
 
