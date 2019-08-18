@@ -53,8 +53,10 @@ def issueAward(restaurant, offerCode):
             db.session.add(awd)
             db.session.commit()
             db.session.close()
-
-            return redirect("http://{0}/a/{1}/award/{2}".format(request.host,restaurant, awardCode))
+            #host = request.host
+            host = "www.cheapyums.com"
+            return "http://{0}/a/{1}/award/{2}".format(host,restaurant, awardCode)
+            #return redirect("http://{0}/a/{1}/award/{2}".format(host,restaurant, awardCode))
         except:
             db.session.rollback()
             print "Error: Award Code already Exists.  Generating new code."
