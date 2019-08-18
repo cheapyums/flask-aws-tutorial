@@ -20,7 +20,7 @@ from datetime import datetime
 from app import application
 #import admintasks
 
-@application.route("/a/<restaurant>/award/<awardCode>")
+@application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd == None:
@@ -30,17 +30,51 @@ def viewAward(restaurant, awardCode):
     if off == None:
         return ""
 
+    res = Restaurant.query.filter_by(code=restaurant).first()
+    if res == None:
+        return
+
     if awd.customers == None:
-        #Setting # of customers to 5 for now
-        awd.customers = 5
-        db.session.commit()
-        db.session.close()
-        return "Please specify the number of members in your party. (Maxium : {0})  Please note that if you specify more members in your party than the ones that actually visit, the restaurant may refuse to honor your award.".format(off.max_customers)
+        if request.method == "GET":
+            print "max Customers is {0}".format(off.max_customers)
+            return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
+        if request.method == "POST":
+            cust = int(request.form.get("customers", 0))
+            print cust
+            print type(cust)
+            if cust > 0 and cust <= off.max_customers:
+                awd.customers = cust
+                db.session.commit()
+                db.session.close()
+            else:
+                return render_template('pre_award.html', maxCustomers=off.max_customers, updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
 
-    return render_template("award.html", restaurant=restaurant, awardCode=awardCode)
+    hours = ""
+    if res.bf_start != None and res.bf_end != None:
+        hours ="{0} - {1}".format(res.bf_start.strftime("%-I:%M %p"), res.bf_end.strftime("%-I:%M %p"))
+    if res.lu_start != None and res.lu_end != None:
+        if hours != "":
+            hours = "{0} / ".format(hours)
+        hours ="{0}{1} - {2}".format(hours,res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
+    if res.di_start != None and res.di_end != None:
+        if hours != "":
+            hours = "{0} / ".format(hours)
+        hours ="{0}{1} - {2}".format(hours,res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
+
+    data={
+        "minPercent": off.min_offer_percent,
+        "maxPercent": off.min_offer_percent + off.off_peak_bonus + off.random_offer_bonus,
+        "startDate": off.valid_start_date.strftime("%-m/%-d/%y"),
+        "endDate": off.valid_end_date.strftime("%-m/%-d/%y"),
+        "peakPercent": off.min_offer_percent,
+        "offPeakPercent": off.min_offer_percent + off.off_peak_bonus,
+        "hours": hours,
+        "customers":awd.customers
+    }
+    return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data)
 
 
-@application.route("/a/<restaurant>/qrcode/<awardCode>", methods=['GET', 'POST'])
+@application.route("/a/<restaurant>/qrcode/<awardCode>")
 def QRCode(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd == None:
@@ -51,19 +85,7 @@ def QRCode(restaurant, awardCode):
         return ""
 
     if awd.customers == None:
-        if request.method == "GET":
-            print "max Customers is {0}".format(off.max_customers)
-            return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/qrcode/{1}".format(restaurant, awardCode))
-        if request.method == "POST":
-            cust = int(request.form.get("customers",0))
-            print cust
-            print type(cust)
-            if cust>0 and cust <= off.max_customers:
-                awd.customers = cust
-                db.session.commit()
-                db.session.close()
-            else:
-                return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/qrcode/{1}".format(restaurant, awardCode))
+        return ""
 
     img_buf = cStringIO.StringIO()
     img = qrcode.make("http://www.cheapyums.com/r/{0}/redemption/{1}".format(restaurant,awardCode))

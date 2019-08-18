@@ -8,11 +8,25 @@
       </div>
 
 <hr>
-    Please specify the number of members in your party. (Maxium : {{ maxCustomers }})  Please note that if you specify more members in your party than the ones that actually visit, the restaurant may refuse to honor your award.
+    To customize your offer, please specify the number of people in your party. (Maximum: {{ maxCustomers }})<BR><BR>
+    <B>Please note:</B> If you specify more people in your party than the ones that actually visit, the restaurant may refuse to honor your award.<BR><BR>
     <form action = "{{ updateURL }}" method="post">
-        People in your party<input type="number" name="customers" min="1" max="{{ maxCustomers }}"/>
+        <TABLE>
+            <TR>
+                <TD width="170">
+                    <B>People in your party</B>
+                </TD>
+                <TD width="100">
+                    <input type="number" name="customers" min="1" max="{{ maxCustomers }}" style="width: 100px;"/>
+                </TD>
+            </TR>
+        </TABLE>
+        <BR>
+
         <input type="submit">
     </form>
+
+
 </div>
 
 {% endblock %}  

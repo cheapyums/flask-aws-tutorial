@@ -9,20 +9,29 @@
 
     div.offerHeader {
         font-size: 6vw;
-
         color: white;
         font-weight: bolder;
     }
     div.offerHeader2{
-        font-size: 40px;
+        font-size: 3vw;
         color: white;
         font-weight: bolder;
     }
     div.offerHeader3{
-        font-size: 20px;
+        font-size: 2vw;
         color: black;
         font-weight: bolder;
     }
+    li.indentation{
+        margin-left: 3vw;
+    }
+    div.offerFooter{
+        font-size: 1.5vw;
+        color: white;
+        font-weight: bolder;
+    }
+
+
 
 </style>
 <TABLE CLASS="bg">
@@ -31,55 +40,44 @@
             <img src="/static/mama-coco.png" width="100%">
         </TD>
     </TR>
-    <TR>
-        <TD WIDTH="70%" HEIGHT="100%" valign="top">
-            <TABLE WIDTH="100%">
-                <TR>
-                    <TD height="180" bgcolor="#35908b" width="100%" align="center" colspan="3">
-                        <div class="offerHeader">
-                            10% - 20% OFF
-                        </div>
-                        <div class="offerHeader2">
-                            ENTIRE BILL FOR PARTY OF 2
-                        </div>
-                        <div class="offerHeader3">
-                            Valid 8/19/19 - 8/24/19
-                        </div>
-                    </TD>
-                </TR>
-                <TR>
-                    <TD width="20px">&nbsp;</TD>
-                    <TD>
-                        <div class="offerHeader3">
-                        UPON ARRIVAL, request code to be scanned to determine discount. Discounts beyond minimum amounts below granted randomly.<BR>
-                        </div>
-                    </TD>
-                </TR>
-                <TR>
-                    <TD width="40px">&nbsp;</TD>
-                    <TD>
-                        <li>
-                            <B>10% MINIMUM when used during peak hours:</B><BR>
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>12:30PM - 2:00 PM and 7:00 PM - 8:00 PM</B><BR><BR>
-                        </li>
-                        <li>
-                            <B>15% MINIMUM when used during off-peak hours</B><BR><BR>
-                        </li>
-                        <B>Cannot be combined with other offers</B>
-                    </TD>
-
-                </TR>
-
-                        </div>
-                    </TD>
-                </TR>
-            </TABLE>
+    <TR bgcolor="#35908b">
+        <TD WIDTH="79.3%" valign="middle" align="center">
+            <div class="offerHeader">
+                {{ data.minPercent }}% - {{ data.maxPercent }}% OFF
+            </div>
+            <div class="offerHeader2">
+                ENTIRE BILL FOR PARTY OF {{ data.customers }}
+            </div>
+            <div class="offerHeader3">
+                Valid {{ data.startDate }} - {{ data.endDate }}
+            </div>
         </TD>
-        <TD WIDTH="30%" ALIGN="RIGHT">
-            <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}">
+        <TD  ALIGN="RIGHT">
+            <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}" width="100%">
         </TD>
     </TR>
-
-
+    <TR>
+        <TD colspan="2">
+            <div class="offerHeader3" style="margin-left: 3vw;">
+                UPON ARRIVAL, get code scanned to determine discount. Discounts beyond minimum amounts below are granted randomly.<BR>
+                <li class="indentation">
+                    <B>{{data.peakPercent}}% MINIMUM: {{ data.hours }}<BR>
+                </li>
+                <li class="indentation">
+                    <B>{{data.offPeakPercent}}% MINIMUM: All other times</B>
+                </li>
+                <div align="center">
+                    <B>Cannot be combined with other offers</B>
+                </div>
+            </div>
+        </TD>
+    </TR>
+    <TR bgcolor="#35908b">
+        <TD colspan="2">
+            <div class="offerFooter" align="center">
+                Offer brought to you by Cheap Yums ™    Find us at https://www.meetup.com/cheap-yums/
+            </div>
+        </TD>
+    </TR>
 </TABLE>
-{% endblock %}  
+{% endblock %}
