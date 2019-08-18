@@ -18,7 +18,7 @@ import random
 from datetime import datetime
 
 from app import application
-import admintasks
+#import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
