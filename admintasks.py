@@ -11,6 +11,7 @@ from coupon_encoder import CouponEncoder
 
 @application.route("/admin/restaurant/add")
 def addRestaurant():
+    db.session.begin()
     r = Restaurant("mama-coco","Mama Coco","fC4We0ggwe4tsftswoh", None, None, "12:30","2:00", "7:00", "8:00")
     db.session.add(r)
     db.session.commit()
@@ -19,6 +20,7 @@ def addRestaurant():
 
 @application.route("/admin/<restaurant>/offer/add")
 def addOffer(restaurant):
+    db.session.begin()
     res = Restaurant.query.filter_by(code=restaurant).first()
     if res is None:
         return "Error: Invalid Restaurant"
@@ -34,6 +36,7 @@ def addOffer(restaurant):
 
 @application.route("/admin/<restaurant>/offer/<offerCode>/issueaward")
 def issueAward(restaurant, offerCode):
+    db.session.begin()
     off = Offer.query.filter_by(code=offerCode, restaurant_code=restaurant).first()
     if off is None:
         return "Error: Invalid Offer.  Offer does not exist."
