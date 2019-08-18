@@ -23,40 +23,36 @@ from app import application
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
-    if awd == None:
+    if awd is None:
         return ""
 
     off = Offer.query.filter_by(code=awd.offer_code, restaurant_code=restaurant).first()
-    if off == None:
+    if off is None:
         return ""
 
     res = Restaurant.query.filter_by(code=restaurant).first()
-    if res == None:
-        return
+    if res is None:
+        return ""
 
     if awd.customers == None:
-        if request.method == "GET":
-            print "max Customers is {0}".format(off.max_customers)
+        if request.method == "GET": 
             return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
         if request.method == "POST":
             cust = int(request.form.get("customers", 0))
-            print cust
-            print type(cust)
             if cust > 0 and cust <= off.max_customers:
                 awd.customers = cust
                 db.session.commit()
-                db.session.close()
             else:
                 return render_template('pre_award.html', maxCustomers=off.max_customers, updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
 
     hours = ""
-    if res.bf_start != None and res.bf_end != None:
+    if res.bf_start is not None and res.bf_end is not None:
         hours ="{0} - {1}".format(res.bf_start.strftime("%-I:%M %p"), res.bf_end.strftime("%-I:%M %p"))
-    if res.lu_start != None and res.lu_end != None:
+    if res.lu_start is not None and res.lu_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
         hours ="{0}{1} - {2}".format(hours,res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
-    if res.di_start != None and res.di_end != None:
+    if res.di_start is not None and res.di_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
         hours ="{0}{1} - {2}".format(hours,res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
@@ -71,6 +67,7 @@ def viewAward(restaurant, awardCode):
         "hours": hours,
         "customers":awd.customers
     }
+    db.session.close()
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data)
 
 
