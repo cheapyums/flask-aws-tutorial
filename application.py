@@ -40,7 +40,7 @@ def viewAward(restaurant, awardCode):
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode)
 
 
-@application.route("/a/<restaurant>/qrcode/<awardCode>")
+@application.route("/a/<restaurant>/qrcode/<awardCode>", methods=['GET', 'POST'])
 def QRCode(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd == None:
@@ -51,11 +51,19 @@ def QRCode(restaurant, awardCode):
         return ""
 
     if awd.customers == None:
-        #Setting # of customers to 5 for now
-        awd.customers = 5
-        db.session.commit()
-        db.session.close()
-        return "Please specify the number of members in your party. (Maxium : {0})  Please note that if you specify more members in your party than the ones that actually visit, the restaurant may refuse to honor your award.".format(off.max_customers)
+        if request.method == "GET":
+            print "max Customers is {0}".format(off.max_customers)
+            return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/qrcode/{1}".format(restaurant, awardCode))
+        if request.method == "POST":
+            cust = int(request.form.get("customers",0))
+            print cust
+            print type(cust)
+            if cust>0 and cust <= off.max_customers:
+                awd.customers = cust
+                db.session.commit()
+                db.session.close()
+            else:
+                return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/qrcode/{1}".format(restaurant, awardCode))
 
     img_buf = cStringIO.StringIO()
     img = qrcode.make("http://www.cheapyums.com/r/{0}/redemption/{1}".format(restaurant,awardCode))

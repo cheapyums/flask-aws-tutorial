@@ -1,15 +1,84 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %} 
 {% block content %}
+<style>
+    table.bg {
+        background: #a6c5c7;
+        padding: 10px;
+        border-spacing: 10px;
+    }
 
-<div class="col-md-4 col-md-offset-4">
+    div.offerHeader {
+        font-size: 70px;
+        color: white;
+        font-weight: bolder;
+    }
+    div.offerHeader2{
+        font-size: 40px;
+        color: white;
+        font-weight: bolder;
+    }
+    div.offerHeader3{
+        font-size: 20px;
+        color: black;
+        font-weight: bolder;
+    }
 
-      <div align="center">
-        <h2>Cheap Yums</h2>
-      </div>
+</style>
+<TABLE CLASS="bg">
+    <TR>
+        <TD COLSPAN="2" WIDTH="100%">
+            <img src="/static/mama-coco.png">
+        </TD>
+    </TR>
+    <TR>
+        <TD WIDTH="70%" HEIGHT="100%" valign="top">
+            <TABLE WIDTH="100%">
+                <TR>
+                    <TD height="180" bgcolor="#35908b" width="100%" align="center" colspan="3">
+                        <div class="offerHeader">
+                            10% - 20% OFF
+                        </div>
+                        <div class="offerHeader2">
+                            ENTIRE BILL FOR PARTY OF 2
+                        </div>
+                        <div class="offerHeader3">
+                            Valid 8/19/19 - 8/24/19
+                        </div>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width="20px">&nbsp;</TD>
+                    <TD>
+                        <div class="offerHeader3">
+                        UPON ARRIVAL, request code to be scanned to determine discount. Discounts beyond minimum amounts below granted randomly.<BR>
+                        </div>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width="40px">&nbsp;</TD>
+                    <TD>
+                        <li>
+                            <B>10% MINIMUM when used during peak hours:</B><BR>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<B>12:30PM - 2:00 PM and 7:00 PM - 8:00 PM</B><BR><BR>
+                        </li>
+                        <li>
+                            <B>15% MINIMUM when used during off-peak hours</B><BR><BR>
+                        </li>
+                        <B>Cannot be combined with other offers</B>
+                    </TD>
 
-<hr>
+                </TR>
 
-<img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}">
-</div>
+                        </div>
+                    </TD>
+                </TR>
+            </TABLE>
+        </TD>
+        <TD WIDTH="30%" ALIGN="RIGHT">
+            <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}">
+        </TD>
+    </TR>
 
+
+</TABLE>
 {% endblock %}  
