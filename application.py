@@ -18,11 +18,12 @@ import random
 from datetime import datetime
 
 from app import application
-import admintasks
+#import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
+    db.session.refresh(awd)
     if awd is None:
         print "Award not found"
         return ""
