@@ -7,7 +7,7 @@ Author: Scott Rodkey - rodkeyscott@gmail.com
 Step-by-step tutorial: https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80
 '''
 
-from flask import render_template, request, send_file, session
+from flask import render_template, request, send_file, session, redirect
 from application import db
 from application.models import Data, Restaurant, Offer, Award
 from application.forms import EnterDBInfo, RetrieveDBInfo
@@ -35,7 +35,7 @@ def viewAward(restaurant, awardCode):
         return ""
 
     if awd.customers == None:
-        if request.method == "GET": 
+        if request.method == "GET":
             return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
         if request.method == "POST":
             cust = int(request.form.get("customers", 0))
@@ -68,6 +68,10 @@ def viewAward(restaurant, awardCode):
         "customers":awd.customers
     }
     db.session.close()
+    if request.method == "POST":
+        print request.method
+        return redirect("/a/{0}/award/{1}".format(restaurant, awardCode))
+    print request.method
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data)
 
 
