@@ -31,8 +31,6 @@
         font-weight: bolder;
     }
 
-
-
 </style>
 <TABLE CLASS="bg">
     <TR>
@@ -54,7 +52,7 @@
             {% if data.status == "REDEEMED" %}
                 <BR>
             <div class="offerHeader3" style="color: blue; background:white">
-                This offer was redeemed on {{ data.redemptionDate }} at {{ data.redemptionTime }}.  Discount offered was {{ data.discount }}.
+                This offer was redeemed on {{ data.redemptionDate }} at {{ data.redemptionTime }}.  Discount offered was {{ data.discount }}%.
             </div>
             {% endif %}
         </TD>
