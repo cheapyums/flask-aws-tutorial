@@ -69,8 +69,14 @@ def viewAward(restaurant, awardCode):
         "peakPercent": off.min_offer_percent,
         "offPeakPercent": off.min_offer_percent + off.off_peak_bonus,
         "hours": hours,
-        "customers":awd.customers
+        "customers":awd.customers,
+        "status": awd.status
     }
+    if awd.status == "REDEEMED":
+        data["discount"]= awd.offer_percent
+        data["redemptionDate"] = awd.redemption_ts.date().strftime("%-m/%-d/%y")
+        data["redemptionTime"] = awd.redemption_ts.time().strftime("%-I:%M %p")
+
     db.session.close()
     if request.method == "POST":
         return redirect("/a/{0}/award/{1}".format(restaurant, awardCode))

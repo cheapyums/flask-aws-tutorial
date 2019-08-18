@@ -51,6 +51,12 @@
             <div class="offerHeader3">
                 Valid {{ data.startDate }} - {{ data.endDate }}
             </div>
+            {% if data.status == "REDEEMED" %}
+                <BR>
+            <div class="offerHeader3" style="color: blue; background:white">
+                This offer was redeemed on {{ data.redemptionDate }} at {{ data.redemptionTime }}.  Discount offered was {{ data.discount }}.
+            </div>
+            {% endif %}
         </TD>
         <TD  ALIGN="RIGHT">
             <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}" width="100%">
