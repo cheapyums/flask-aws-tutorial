@@ -21,7 +21,7 @@ from app import application
 #import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
-#@isolation_level("READ COMMITTED")
+@isolation_level("READ COMMITTED")
 def viewAward(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
