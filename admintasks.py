@@ -1,4 +1,4 @@
-#from flask import Flask, render_template, request, send_file, session
+from flask import redirect, request
 
 from datetime import datetime
 import random
@@ -53,7 +53,8 @@ def issueAward(restaurant, offerCode):
             db.session.add(awd)
             db.session.commit()
             db.session.close()
-            return ""
+
+            return redirect("http://{0}/a/{1}/award/{2}".format(request.host,restaurant, awardCode))
         except:
             db.session.rollback()
             print "Error: Award Code already Exists.  Generating new code."

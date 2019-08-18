@@ -18,20 +18,23 @@ import random
 from datetime import datetime
 
 from app import application
-#import admintasks
+import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
+        print "Award not found"
         return ""
 
     off = Offer.query.filter_by(code=awd.offer_code, restaurant_code=restaurant).first()
     if off is None:
+        print "Offer not found"
         return ""
 
     res = Restaurant.query.filter_by(code=restaurant).first()
     if res is None:
+        print "Restaurant not found"
         return ""
 
     if awd.customers == None:
@@ -69,9 +72,7 @@ def viewAward(restaurant, awardCode):
     }
     db.session.close()
     if request.method == "POST":
-        print request.method
         return redirect("/a/{0}/award/{1}".format(restaurant, awardCode))
-    print request.method
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data)
 
 
@@ -179,6 +180,15 @@ def redeemOffer(restaurant, awardCode):
 @application.route('/', methods=['GET', 'POST'])
 @application.route('/index', methods=['GET', 'POST'])
 def index():
+    return ""
+
+if __name__ == '__main__':
+    application.run(host='0.0.0.0')
+
+'''
+@application.route('/', methods=['GET', 'POST'])
+@application.route('/index', methods=['GET', 'POST'])
+def index():
     form1 = EnterDBInfo(request.form)
     form2 = RetrieveDBInfo(request.form)
 
@@ -204,16 +214,4 @@ def index():
         return render_template('results.html', results=query_db, num_return=num_return)
 
     return render_template('index.html', form1=form1, form2=form2)
-
-if __name__ == '__main__':
-    application.run(host='0.0.0.0')
-
-'''
-@application.route("/qr")
-def QRCode():
-    img_buf = cStringIO.StringIO()
-    img = qrcode.make('http://www.google.com')  # , image_factory=PymagingImage)
-    img.save(img_buf)
-    img_buf.seek(0)
-    return send_file(img_buf, mimetype='image/png')
 '''
