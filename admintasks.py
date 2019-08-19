@@ -6,13 +6,14 @@ import random
 from app import application
 from application import db
 from application.models import Restaurant, Offer, Award
-
 from coupon_encoder import CouponEncoder
+from cheapyums.core.utils import convertUTCToTimezone
+
 
 @application.route("/admin/restaurant/add")
 def addRestaurant():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    r = Restaurant("mama-coco","Mama Coco","fC4We0ggwe4tsftswoh", None, None, "12:30","2:00", "7:00", "8:00")
+    r = Restaurant("mama-coco","Mama Coco","America/Los_Angeles","fC4We0ggwe4tsftswoh", None, None, "12:30","14:00", "19:00", "20:00")
     db.session.add(r)
     db.session.commit()
     db.session.close()
@@ -41,7 +42,11 @@ def issueAward(restaurant, offerCode):
     if off is None:
         return "Error: Invalid Offer.  Offer does not exist."
 
-    if off.valid_end_date < datetime.now().date():
+    res = Restaurant.query.filter_by(code=restaurant).first()
+    if res is None:
+        return "Error: Invalid Restaurant"
+
+    if off.valid_end_date < convertUTCToTimezone(datetime.utcnow(), res.timezone).date():
         return "Error: Offer Expired."
 
     if off.status != "ACTIVE":
@@ -51,15 +56,13 @@ def issueAward(restaurant, offerCode):
 
     while True:
         awardCode =  c.encode(random.randrange(1,150000000), num_digits=8)
-        awd = Award(awardCode, restaurant, offerCode, None, datetime.now())
+        awd = Award(awardCode, restaurant, offerCode, None, datetime.utcnow())
         try:
             db.session.add(awd)
             db.session.commit()
             db.session.close()
-            #host = request.host
             host = "www.cheapyums.com"
             return "http://{0}/a/{1}/award/{2}".format(host,restaurant, awardCode)
-            #return redirect("http://{0}/a/{1}/award/{2}".format(host,restaurant, awardCode))
         except:
             db.session.rollback()
             print "Error: Award Code already Exists.  Generating new code."

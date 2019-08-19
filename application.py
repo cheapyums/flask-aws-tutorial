@@ -1,23 +1,14 @@
-'''
-Simple Flask application to test deployment to Amazon Web Services
-Uses Elastic Beanstalk and RDS
-
-Author: Scott Rodkey - rodkeyscott@gmail.com
-
-Step-by-step tutorial: https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80
-'''
-
 from flask import render_template, request, send_file, session, redirect
-from application import db, isolation_level
-from application.models import Data, Restaurant, Offer, Award
-from application.forms import EnterDBInfo, RetrieveDBInfo
-
+from application import db
+from application.models import Restaurant, Offer, Award
+from datetime import datetime
 import qrcode
 import cStringIO
 import random
-from datetime import datetime
-
 from app import application
+from cheapyums.core.utils import convertUTCToTimezone
+
+
 #import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
@@ -38,12 +29,12 @@ def viewAward(restaurant, awardCode):
         print "Restaurant not found"
         return ""
 
-    if awd.customers == None:
+    if awd.customers is None:
         if request.method == "GET":
             return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
         if request.method == "POST":
             cust = int(request.form.get("customers", 0))
-            if cust > 0 and cust <= off.max_customers:
+            if 0 < cust <= off.max_customers:
                 awd.customers = cust
                 db.session.commit()
             else:
@@ -51,15 +42,15 @@ def viewAward(restaurant, awardCode):
 
     hours = ""
     if res.bf_start is not None and res.bf_end is not None:
-        hours ="{0} - {1}".format(res.bf_start.strftime("%-I:%M %p"), res.bf_end.strftime("%-I:%M %p"))
+        hours = "{0} - {1}".format(res.bf_start.strftime("%-I:%M %p"), res.bf_end.strftime("%-I:%M %p"))
     if res.lu_start is not None and res.lu_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
-        hours ="{0}{1} - {2}".format(hours,res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
+        hours = "{0}{1} - {2}".format(hours,res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
     if res.di_start is not None and res.di_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
-        hours ="{0}{1} - {2}".format(hours,res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
+        hours = "{0}{1} - {2}".format(hours,res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
 
     data={
         "minPercent": off.min_offer_percent,
@@ -87,14 +78,14 @@ def viewAward(restaurant, awardCode):
 def QRCode(restaurant, awardCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
-    if awd == None:
+    if awd is None:
         return ""
 
     off = Offer.query.filter_by(code=awd.offer_code, restaurant_code=restaurant).first()
-    if off == None:
+    if off is None:
         return ""
 
-    if awd.customers == None:
+    if awd.customers is None:
         return ""
 
     img_buf = cStringIO.StringIO()
@@ -103,22 +94,24 @@ def QRCode(restaurant, awardCode):
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
 
+
 @application.route("/r/<restaurant>/quicklogin/<loginCode>")
 def quickLogin(restaurant, loginCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    q = Restaurant.query.filter_by(code=restaurant).first()
-    if q == None:
+    res = Restaurant.query.filter_by(code=restaurant).first()
+    if res is None:
         return "The page you are trying to access does not exist!"
-    if q.password == loginCode:
+    if res.password == loginCode:
         session["restaurant"] = restaurant
         session["loggedIn"] = True
-        return "You are now logged in as {0}".format(q.name)
+        return "You are now logged in as {0}".format(res.name)
     else:
         session["restaurant"] = None
         session["loggedIn"] = False
     return "The page you are trying to access does not exist!"
 
 
+## DATE CONDITIONS STILL NOT PROPERLY CHECKED
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
@@ -143,31 +136,36 @@ def redeemOffer(restaurant, awardCode):
     if awd.status == "REDEEMED":
         return "This award was redeemed on {0} at {1}.<p>Total discount: {2}%<p>Number of Customers: {3}".format(awd.redemption_ts.date(), awd.redemption_ts.time(), awd.offer_percent, awd.customers)
 
-    #Offer seems valid.  Now let us set up all the offer details
+    now = convertUTCToTimezone(datetime.utcnow(), res.timezone)
 
-    #######CHECK TO SEE IF THE OFFER HAS EXPIRED!!!!!
+    # Check to see if the award is currently valid based on the start and end dates
+    if now.date() < off.valid_start_date or now.date() > off.valid_end_date:
+        return "This offer is not currently valid.  This offer is only valid from {0} to {1}.".format(off.valid_start_date.strftime("%-m/%-d/%y"), off.valid_end_date.strftime("%-m/%-d/%y"))
 
-    now = datetime.now().time()
+    # Offer is valid.  Now let us set up all the offer details
+
     print "Current Time is {0}".format(now)
+    print now.time()
+
     isPeak = False
     if res.bf_start is not None and res.bf_end is not None:
-        if now> res.bf_start and now < res.bf_end:
+        if res.bf_start <= now.time() < res.bf_end:
             print "Breakfast Rush Hour"
             isPeak = True
     if res.lu_start is not None and res.lu_end is not None:
-        if now> res.lu_start and now < res.lu_end:
+        if res.lu_start <= now.time() < res.lu_end:
             print "Lunch Rush Hour"
             isPeak = True
     if res.di_start is not None and res.di_end is not None:
-        if now> res.di_start and now < res.di_end:
+        if res.di_start <= now.time() < res.di_end:
             print "Dinner Rush Hour"
             isPeak = True
 
     print isPeak
 
-    print "Minimum Offer %: {0}".format(off.min_offer_percent)
-    print "Offpeak Bonus %: {0}".format(off.off_peak_bonus)
-    print "Random Offer Bonus %: {0}".format(off.random_offer_bonus)
+    print "Minimum Offer % : {0}".format(off.min_offer_percent)
+    print "Offpeak Bonus % : {0}".format(off.off_peak_bonus)
+    print "Random Offer Bonus % : {0}".format(off.random_offer_bonus)
     bonus = random.randrange(0, off.random_offer_bonus+1)
     print "Bonus {0}".format(bonus)
 
@@ -177,7 +175,7 @@ def redeemOffer(restaurant, awardCode):
     offerValue = offerValue + bonus
     print "Total Offer Value = {0}".format(offerValue)
 
-    awd.redemption_ts = datetime.now()
+    awd.redemption_ts = datetime.utcnow()
     awd.status = "REDEEMED"
     awd.offer_percent = offerValue
     db.session.commit()
@@ -193,34 +191,3 @@ def index():
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
-
-'''
-@application.route('/', methods=['GET', 'POST'])
-@application.route('/index', methods=['GET', 'POST'])
-def index():
-    form1 = EnterDBInfo(request.form)
-    form2 = RetrieveDBInfo(request.form)
-
-    if request.method == 'POST' and form1.validate():
-        data_entered = Data(notes=form1.dbNotes.data)
-        try:
-            db.session.add(data_entered)
-            db.session.commit()
-            db.session.close()
-        except:
-            db.session.rollback()
-        return render_template('thanks.html', notes=form1.dbNotes.data)
-
-    if request.method == 'POST' and form2.validate():
-        try:
-            num_return = int(form2.numRetrieve.data)
-            query_db = Data.query.order_by(Data.id.desc()).limit(num_return)
-            for q in query_db:
-                print(q.notes)
-            db.session.close()
-        except:
-            db.session.rollback()
-        return render_template('results.html', results=query_db, num_return=num_return)
-
-    return render_template('index.html', form1=form1, form2=form2)
-'''

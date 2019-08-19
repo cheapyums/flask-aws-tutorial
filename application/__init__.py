@@ -6,6 +6,7 @@ application.config.from_object('config')
 db = SQLAlchemy(application)
 
 
+'''
 def isolation_level(level):
     """Return a Flask view decorator to set SQLAlchemy isolation level
 
@@ -24,3 +25,8 @@ def isolation_level(level):
         return view_wrapper
 
     return decorator
+    
+#This may be useful for setting the SQLAlchemy engine
+#db.engine.update_execution_options(isolation_level = "READ COMMITTED")
+#print db.engine.get_execution_options()
+'''

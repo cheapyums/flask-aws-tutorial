@@ -1,18 +1,10 @@
 from application import db
 
-class Data(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    notes = db.Column(db.String(128), index=True, unique=False)
-    
-    def __init__(self, notes):
-        self.notes = notes
-
-    def __repr__(self):
-        return '<Data %r>' % self.notes
 
 class Restaurant(db.Model):
     code = db.Column(db.String(30), primary_key=True)
     name = db.Column(db.String(128))
+    timezone = db.Column(db.String(50))
     password = db.Column(db.String(30))
     bf_start = db.Column(db.Time)
     bf_end = db.Column(db.Time)
@@ -22,9 +14,10 @@ class Restaurant(db.Model):
     di_end = db.Column(db.Time)
     status = db.Column(db.String(30))
 
-    def __init__(self, code, name, password, bf_start, bf_end, lu_start, lu_end, di_start, di_end, status="ACTIVE"):
+    def __init__(self, code, name, timezone, password, bf_start, bf_end, lu_start, lu_end, di_start, di_end, status="ACTIVE"):
         self.code = code
         self.name = name
+        self.timezone = timezone
         self.password = password
         self.bf_start = bf_start
         self.bf_end = bf_end
@@ -33,7 +26,6 @@ class Restaurant(db.Model):
         self.di_start = di_start
         self.di_end = di_end
         self.status = status
-
 
 
 class Offer(db.Model):
@@ -57,7 +49,6 @@ class Offer(db.Model):
         self.valid_start_date = valid_start_date
         self.valid_end_date = valid_end_date
         self.status = status
-
 
 
 class Award(db.Model):
