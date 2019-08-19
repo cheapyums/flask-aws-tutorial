@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% import 'macros.html' as macros %} 
+{% block content %}
+
+<div class="col-md-4 col-md-offset-4">
+
+      <div align="center">
+        <h2>Cheap Yums</h2>
+      </div>
+
+<hr>
+    If you are a restaurant, please enter your user name and password to log in. <BR><BR>
+    <form action = "/r/login" method="post">
+        <div align="center">
+            <TABLE>
+                <TR>
+                    <TD width="130">
+                        <B>User Name:</B>
+                    </TD>
+                    <TD width="100">
+                        <input type="text" name="username"  style="width: 170px;"/>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD>
+                        &nbsp;
+                    </TD>
+                </TR>
+                <TR>
+                    <TD width="130">
+                        <B>Password:</B>
+                    </TD>
+                    <TD width="100">
+                        <input type="password" name="password"  style="width: 170px;"/>
+                    </TD>
+                </TR>
+            </TABLE>
+        </div>
+        <BR>
+        <BR>
+
+        <div align="center">
+        <input type="submit">
+        </div>
+
+    </form>
+
+
+</div>
+
+{% endblock %}  

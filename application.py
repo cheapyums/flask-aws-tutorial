@@ -94,24 +94,30 @@ def QRCode(restaurant, awardCode):
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
 
-
-@application.route("/r/<restaurant>/quicklogin/<loginCode>")
-def quickLogin(restaurant, loginCode):
+@application.route("/r/login", methods=['GET', 'POST'])
+def logIn():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    res = Restaurant.query.filter_by(code=restaurant).first()
-    if res is None:
-        return "The page you are trying to access does not exist!"
-    if res.password == loginCode:
-        session["restaurant"] = restaurant
-        session["loggedIn"] = True
+    if "restaurant" in session and session["loggedIn"] == True:
+        restaurant = session["restaurant"]
+        res = Restaurant.query.filter_by(code=restaurant).first()
+        if res is None:
+            return render_template("login.html")
         return "You are now logged in as {0}".format(res.name)
-    else:
-        session["restaurant"] = None
-        session["loggedIn"] = False
-    return "The page you are trying to access does not exist!"
 
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        res = Restaurant.query.filter_by(code=username).first()
+        if res is None:
+            return redirect("/r/login")
+        if res.password == password:
+            session["restaurant"] = username
+            session["loggedIn"] = True
+            return "You are now logged in as {0}".format(res.name)
+        else:
+            return redirect("/r/login")
+    return render_template("login.html")
 
-## DATE CONDITIONS STILL NOT PROPERLY CHECKED
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
