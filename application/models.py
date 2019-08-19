@@ -70,3 +70,13 @@ class Award(db.Model):
         self.status = status
         self.redemption_ts = redemption_ts
         self.offer_percent = offer_percent
+
+class User(db.Model):
+    username = db.Column(db.String(30), primary_key=True)
+    name = db.Column(db.String(128))
+    password = db.Column(db.String(30))
+
+    def __init__(self, username, name, password):
+        self.username = username
+        self.name = name
+        self.password = password

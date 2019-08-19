@@ -9,7 +9,7 @@ from app import application
 from cheapyums.core.utils import convertUTCToTimezone
 
 
-#import admintasks
+import admintasks
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
@@ -101,7 +101,7 @@ def logIn():
         restaurant = session["restaurant"]
         res = Restaurant.query.filter_by(code=restaurant).first()
         if res is None:
-            return render_template("login.html")
+            return render_template("login.html", path="/r/login")
         return "You are now logged in as {0}".format(res.name)
 
     if request.method == "POST":
@@ -116,7 +116,7 @@ def logIn():
             return "You are now logged in as {0}".format(res.name)
         else:
             return redirect("/r/login")
-    return render_template("login.html")
+    return render_template("login.html", path="/r/login")
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
