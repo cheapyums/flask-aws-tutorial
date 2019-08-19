@@ -65,8 +65,8 @@ def viewAward(restaurant, awardCode):
     }
     if awd.status == "REDEEMED":
         data["discount"]= awd.offer_percent
-        data["redemptionDate"] = awd.redemption_ts.date().strftime("%-m/%-d/%y")
-        data["redemptionTime"] = awd.redemption_ts.time().strftime("%-I:%M %p")
+        data["redemptionDate"] = convertUTCToTimezone(awd.redemption_ts, res.timezone).date().strftime("%-m/%-d/%y")
+        data["redemptionTime"] = convertUTCToTimezone(awd.redemption_ts, res.timezone).time().strftime("%-I:%M %p")
 
     db.session.close()
     if request.method == "POST":
@@ -134,7 +134,8 @@ def redeemOffer(restaurant, awardCode):
         return "This offer is not valid in this establishment."
 
     if awd.status == "REDEEMED":
-        return "This award was redeemed on {0} at {1}.<p>Total discount: {2}%<p>Number of Customers: {3}".format(awd.redemption_ts.date(), awd.redemption_ts.time(), awd.offer_percent, awd.customers)
+        dt = convertUTCToTimezone(awd.redemption_ts, res.timezone)
+        return "This award was redeemed on {0} at {1}.<p>Total discount: {2}%<p>Number of Customers: {3}".format(dt.date(), dt.time(), awd.offer_percent, awd.customers)
 
     now = convertUTCToTimezone(datetime.utcnow(), res.timezone)
 
