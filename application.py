@@ -13,7 +13,7 @@ import admintasks
 
 @application.route("/host")
 def host():
-    print request.host
+    return request.host
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
