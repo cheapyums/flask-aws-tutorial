@@ -11,6 +11,10 @@ from cheapyums.core.utils import convertUTCToTimezone
 
 import admintasks
 
+@application.route("/host")
+def host():
+    print request.host
+
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
