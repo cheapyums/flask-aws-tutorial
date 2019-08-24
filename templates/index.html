@@ -1,36 +1,69 @@
-{% extends "base.html" %} {% import 'macros.html' as macros %} 
+{% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
+<style>
 
-<div class="col-md-4 col-md-offset-4">
+    table.bg {
+        background: url("/static/landing_background_desktop.png");
+        background-repeat: no-repeat;
+        background-size: 100%;
+        min-height: 300px;
+    }
 
-      <div align="center">
-        <h2>Flask-AWS Tutorial</h2>
-      </div>
+    h1.logo {
+        text-align: center;
+        font-size: 6vw;
+        color: white;
+    }
 
-<hr>
+    h3 {
+        text-align: center;
+        font-size: 1.3vw;
+        color: white;
+        font-weight: normal;
+        font-style: italic;
+    }
 
-<form method="post" action="/index"  id="db_post" name="db_post">
+</style>
+    <TABLE CLASS="bg" WIDTH="100%">
+        <TR>
+            <TD COLSPAN="2">
+                <H1 CLASS="logo">
+                    <IMG SRC="/static/logo.png" WIDTH="10%">
+                        YumsApp
+                </H1>
+            </TD>
+        </TR>
+        <TR>
+            <TD COLSPAN="3">
+                <H3>
+                    comming soon - the yummiest deals on your phone!
+                </H3>
 
-    {{ form1.hidden_tag() }} 
-    
-    {{ macros.render_field(form1.dbNotes, placeholder='Enter text to submit to the DB', type='dbNotes', label_visible=false) }}
-    
-    <div align="center"><button type="submit" class="btn btn-primary">Submit</button></p></div>
+            </TD>
+        </TR>
+        <TR>
+            <TD WIDTH="50%" ALIGN="RIGHT">
+                <H3>
+                    <IMG SRC="/static/btn_for_restaurants.png" WIDTH="50%"><BR>
+                    grow your business with us
+                </H3>
+            </TD>
+            <TD WIDTH="50%">
+                <H3>
+                    <IMG SRC="/static/btn_for_foodies.png" WIDTH="50%"><BR>
+                    discover great yums and offers
+                </H3>
+            </TD>
+        </TR>
+        <TR>
+            <TD COLSPAN="2">
+                <IMG HEIGHT="280">
+                <H3 STYLE="color: black">
+                    YumsApp™ 2019
+                </H3>
+            </TD>
+        </TR>
+    </TABLE>
 
-</form>   
 
-<hr>
-
-<form method="post" action="/index"  id="db_post" name="db_view">
-
-    {{ form2.hidden_tag() }} 
-    
-    {{ macros.render_field(form2.numRetrieve, placeholder='Retrieve last N DB entries (enter 1-9)', type='numRetrieve', label_visible=false) }}
-    
-    <div align="center"><button type="submit" class="btn btn-primary">Retrieve</button></p></div>
-
-</form>   
-
-</div>
-
-{% endblock %}  
+{% endblock %}

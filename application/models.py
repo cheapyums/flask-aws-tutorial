@@ -71,6 +71,7 @@ class Award(db.Model):
         self.redemption_ts = redemption_ts
         self.offer_percent = offer_percent
 
+
 class User(db.Model):
     username = db.Column(db.String(30), primary_key=True)
     name = db.Column(db.String(128))
@@ -80,3 +81,32 @@ class User(db.Model):
         self.username = username
         self.name = name
         self.password = password
+
+
+class RestaurantLead(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    restaurant = db.Column(db.String(150))
+    manager = db.Column(db.String(150))
+    email = db.Column(db.String(150))
+    phone = db.Column(db.String(30))
+    zipcode = db.Column(db.String(10))
+
+    def __init__(self, restaurant, manager, email, phone, zipcode):
+        self.restaurant = restaurant
+        self.manager = manager
+        self.email = email
+        self.phone = phone
+        self.zipcode = zipcode
+
+
+class CustomerLead(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150))
+    email = db.Column(db.String(150))
+    zipcode = db.Column(db.String(10))
+
+    def __init__(self, name, email, zipcode):
+        self.name = name
+        self.email = email
+        self.zipcode = zipcode
+

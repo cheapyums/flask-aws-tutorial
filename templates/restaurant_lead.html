@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% import 'macros.html' as macros %}
+{% block content %}
+<style>
+
+</style>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <DIV STYLE="width: 100%; text-align: center">
+        <IMG SRC="/static/logo_and_name.png">
+    </DIV>
+
+    <DIV STYLE="text-align: center">
+        <H3>
+            Drive more foot traffic to your restaurant, whenever you need it!<BR><BR>
+        </H3>
+    </DIV>
+
+    <FORM ACTION="/act" METHOD="post">
+        <TABLE class="form" width="400" ALIGN="center">
+            <TR>
+                <TD COLSPAN="3">
+                    RESTAURANT NAME:<BR>
+                    <INPUT TYPE="text" NAME="restaurant" SIZE="70" VALUE="{{ data.restaurant }}">
+                </TD>
+            </TR>
+            <TR><TD>&nbsp;</TD></TR>
+            <TR>
+                <TD width="200">
+                    YOUR NAME:<BR>
+                    <INPUT TYPE="text" NAME="manager" SIZE="38" VALUE="{{ data.manager }}">
+                </TD>
+                <TD WIDTH="20">
+                    &nbsp;
+                </TD>
+                <TD width="180">
+                    ZIP CODE:<BR>
+                    <INPUT TYPE="text" NAME="zipcode" SIZE="30" VALUE="{{ data.zipcode }}">
+                </TD>
+            </TR>
+            <TR><TD>&nbsp;</TD></TR>
+            <TR>
+                <TD width="200">
+                    EMAIL:<BR>
+                    <INPUT TYPE="text" NAME="email" SIZE="38" VALUE="{{ data.email }}">
+                </TD>
+                <TD WIDTH="20">
+                    &nbsp;
+                </TD>
+                <TD width="180">
+                    PHONE NO:<BR>
+                    <INPUT TYPE="text" NAME="phone" SIZE="30" VALUE="{{ data.phone }}">
+                </TD>
+            </TR>
+            <TR><TD>&nbsp;</TD></TR>
+            <TR>
+                <TD COLSPAN="3" align="center">
+                    <INPUT TYPE="submit" class="fsSubmitButton">
+                </TD>
+            </TR>
+        </TABLE>
+    </FORM>
+
+    <BR><BR>
+
+    <DIV STYLE="text-align: center">
+        <H4>
+            As your growth partner, we only make money when you make money!
+        </H4>
+    </DIV>
+
+{% endblock %}

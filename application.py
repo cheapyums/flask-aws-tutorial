@@ -1,15 +1,84 @@
-from flask import render_template, request, send_file, session, redirect
+from flask import render_template, request, send_file, session, redirect, flash
 from application import db
-from application.models import Restaurant, Offer, Award
+from application.models import Restaurant, Offer, Award, RestaurantLead, CustomerLead
 from datetime import datetime
 import qrcode
 import cStringIO
 import random
+import re
 from app import application
 from cheapyums.core.utils import convertUTCToTimezone
 
 
 import admintasks
+
+
+@application.route("/act", methods=['GET', 'POST'])
+def info():
+    if request.method == "GET":
+        return render_template("restaurant_lead.html", data={})
+    if request.method == "POST":
+        data = {
+            "restaurant": request.form.get("restaurant", ""),
+            "manager": request.form.get("manager", ""),
+            "zipcode": request.form.get("zipcode", ""),
+            "email": request.form.get("email", ""),
+            "phone": request.form.get("phone", "")
+        }
+
+        error = False
+        if data["restaurant"] == "":
+            error = True
+            flash("Please provide the name of your restaurant")
+        if data["manager"] == "":
+            error = True
+            flash("Please provide your name")
+
+        if not re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", data["email"]):
+            error = True
+            flash("Please provide a valid email address.")
+
+        if data["email"] == "" and data["phone"] == "":
+            error = True
+            flash("In order for us to contact you, please provide either your email or your phone number")
+        if error:
+            return render_template("restaurant_lead.html", data=data)
+
+        lead = RestaurantLead(data["restaurant"],data["manager"], data["email"], data["phone"], data["zipcode"])
+        db.session.add(lead)
+        db.session.commit()
+        db.session.close()
+        return "Thank you very much. We will be contacting you shortly!"
+
+@application.route("/comingsoon", methods=['GET', 'POST'])
+def clientinfo():
+    if request.method == "GET":
+        return render_template("customer_lead.html", data={})
+    if request.method == "POST":
+        data = {
+            "name": request.form.get("name", ""),
+            "zipcode": request.form.get("zipcode", ""),
+            "email": request.form.get("email", ""),
+        }
+
+        error = False
+        if data["name"] == "":
+            error = True
+            flash("Please provide your name")
+
+        if not re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", data["email"]):
+            error = True
+            flash("Please provide a valid email address.")
+
+        if error:
+            return render_template("customer_lead.html", data=data)
+
+        lead = CustomerLead(data["name"],data["email"], data["zipcode"])
+        db.session.add(lead)
+        db.session.commit()
+        db.session.close()
+        return "Thank you very much. We will be contacting you shortly!"
+
 
 @application.route("/host")
 def host():
@@ -198,6 +267,7 @@ def redeemOffer(restaurant, awardCode):
 @application.route('/', methods=['GET', 'POST'])
 @application.route('/index', methods=['GET', 'POST'])
 def index():
+    return render_template("index.html")
     return ""
 
 if __name__ == '__main__':
