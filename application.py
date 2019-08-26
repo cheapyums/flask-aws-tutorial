@@ -12,7 +12,6 @@ from cheapyums.core.utils import convertUTCToTimezone
 
 import admintasks
 
-
 @application.route("/act", methods=['GET', 'POST'])
 def info():
     if request.method == "GET":

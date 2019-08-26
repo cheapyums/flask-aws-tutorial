@@ -1,29 +1,133 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
-<style>
+    <style>
 
-    table.bg {
-        background: url("/static/landing_background_desktop.png");
-        background-repeat: no-repeat;
-        background-size: 100%;
-        min-height: 300px;
-    }
+        table.bg {
+            background: url("/static/landing_background_desktop.png");
+            background-repeat: no-repeat;
+            background-size: 100%;
+            min-height: 300px;
+        }
 
-    h1.logo {
-        text-align: center;
-        font-size: 6vw;
-        color: white;
-    }
+        h1.logo {
+            text-align: center;
+            font-size: 6vw;
+            color: white;
+        }
 
-    h3 {
-        text-align: center;
-        font-size: 1.3vw;
-        color: white;
-        font-weight: normal;
-        font-style: italic;
-    }
+        h3 {
+            text-align: center;
+            font-size: 1.3vw;
+            color: white;
+            font-weight: normal;
+            font-style: italic;
+        }
 
-</style>
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            #padding: 1em;
+        }
+
+
+
+        .mobile {
+             background-image: url("/static/landing_background_mobile.png");
+             background-attachment: fixed;
+             background-position: center;
+             background-repeat: no-repeat;
+             background-size: cover;
+             height: 100%;
+        }
+
+        .desktop {
+             background-image: url("/static/landing_background_desktop.png");
+             background-attachment: fixed;
+             background-position: center;
+             background-repeat: no-repeat;
+             background-size: cover;
+             height: 100%;
+        }
+
+        h4{
+            color: white;
+            text-align: center;
+            font-style: italic;
+            font-size: 2vw;
+        }
+        .xs-note{
+            color: white;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.25vw;
+        }
+
+        .sm-note{
+            color: white;
+            text-align: center;
+            font-style: italic;
+            font-size: 1.45vw;
+        }
+
+    </style>
+
+
+    <div class="container-fluid fullscreen">
+        <div class="row fullscreen">
+            <div class="col-xs-12 hidden-sm hidden-md hidden-lg mobile">
+                <div class="row" style="height: 40%">
+                    <img class="img-responsive" src="/static/logo.png" style="height: 50%">
+                </div>
+                <div class="row" style="height: 10%;">
+                    <h4>
+                        Coming soon - the yummiest deals on your phone!
+                    </h4>
+                </div>
+
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-3 xs-note">
+                    <img class="img-responsive" src="/static/btn_for_restaurants.png">
+                    grow your business with us
+                </div>
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-3 xs-note">
+                    <img class="img-responsive" src="/static/btn_for_foodies.png">
+                    discover great yums and offers
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+            <div class="hidden-xs col-sm-12 desktop">
+                <div class="row" style="height: 40%">
+                    <img class="img-responsive" src="/static/logo.png" style="height: 50%">
+                </div>
+                <div class="row" style="height: 10%">
+                    <h4>
+                        Coming soon - the yummiest deals on your phone!
+                    </h4>
+                </div>
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-3 sm-note">
+                    <img class="img-responsive" src="/static/btn_for_restaurants.png">
+                    grow your business with us
+                </div>
+                <div class="col-xs-2">
+                </div>
+                <div class="col-xs-3 sm-note">
+                    <img class="img-responsive" src="/static/btn_for_foodies.png">
+                    discover great yums and offers
+                </div>
+                <div class="col-xs-2">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!---
     <TABLE CLASS="bg" WIDTH="100%">
         <TR>
             <TD COLSPAN="2">
@@ -64,6 +168,7 @@
             </TD>
         </TR>
     </TABLE>
+    --->
 
 
 {% endblock %}
