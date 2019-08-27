@@ -49,7 +49,7 @@ def info():
         db.session.close()
         return "Thank you very much. We will be contacting you shortly!"
 
-@application.route("/comingsoon", methods=['GET', 'POST'])
+@application.route("/eat", methods=['GET', 'POST'])
 def clientinfo():
     if request.method == "GET":
         return render_template("customer_lead.html", data={})

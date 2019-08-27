@@ -1,105 +1,91 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
     <style>
-
         html, body {
             height: 100%;
             margin: 0;
             #padding: 1em;
         }
-        
-        .mobile {
-             background-image: url("/static/landing_background_mobile.png");
-             background-attachment: fixed;
-             background-position: center;
-             background-repeat: no-repeat;
-             background-size: cover;
-             height: 100%;
-        }
 
-        .desktop {
+        .ya-bg {
              background-image: url("/static/landing_background_desktop.png");
              background-attachment: fixed;
-             background-position: center;
+             background-position: center bottom;
              background-repeat: no-repeat;
              background-size: cover;
              height: 100%;
         }
 
-        h4{
-            color: white;
-            text-align: center;
-            font-style: italic;
-            font-size: 2vw;
-        }
-        .xs-note{
-            color: white;
-            text-align: center;
-            font-style: italic;
-            font-size: 1.25vw;
+        .mobile {
+            #background-position-x: -120px;
         }
 
-        .sm-note{
-            color: white;
-            text-align: center;
-            font-style: italic;
-            font-size: 1.45vw;
+        .bg-dark-alpha{
+            background: rgba(0,0,0,0.5);
+        }
+
+        .h-10{
+            height: 10%;
         }
 
     </style>
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+      <a class="navbar-brand" href="#"><img class="img-responsive" src="/static/logo_long_sm.png"></a>
+    </nav>
 
 
-    <div class="container-fluid fullscreen">
-        <div class="row fullscreen">
-            <div class="col-xs-12 hidden-sm hidden-md hidden-lg mobile">
-                <div class="row" style="height: 40%">
-                    <img class="img-responsive" src="/static/logo.png" style="height: 50%">
-                </div>
-                <div class="row" style="height: 10%;">
-                    <h4>
-                        Coming soon - the yummiest deals on your phone!
-                    </h4>
-                </div>
-
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-3 xs-note">
-                    <img class="img-responsive" src="/static/btn_for_restaurants.png">
-                    grow your business with us
-                </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-3 xs-note">
-                    <img class="img-responsive" src="/static/btn_for_foodies.png">
-                    discover great yums and offers
-                </div>
-                <div class="col-xs-2">
-                </div>
+    <!---MOBILE FORMAT--->
+    <div class="container-fluid d-md-none ya-bg mobile">
+        <div class="d-flex h-50 flex-column justify-content-around align-items-center pt-5">
+            <div class="col-12">
+                &nbsp;
             </div>
-            <div class="hidden-xs col-sm-12 desktop">
-                <div class="row" style="height: 40%">
-                    <img class="img-responsive" src="/static/logo.png" style="height: 50%">
-                </div>
-                <div class="row" style="height: 10%">
-                    <h4>
-                        Coming soon - the yummiest deals on your phone!
-                    </h4>
-                </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-3 sm-note">
-                    <img class="img-responsive" src="/static/btn_for_restaurants.png">
-                    grow your business with us
-                </div>
-                <div class="col-xs-2">
-                </div>
-                <div class="col-xs-3 sm-note">
-                    <img class="img-responsive" src="/static/btn_for_foodies.png">
-                    discover great yums and offers
-                </div>
-                <div class="col-xs-2">
-                </div>
+            <div class="col-8">
+                <a href="/act">
+                    <img class="img-fluid" src="/static/btn_for_restaurants.png">
+                </a>
+                <p class="mt-2 bg-dark-alpha h6 text-white text-center text-italic">grow your business with us</p>
             </div>
+            <div class="col-8">
+                <a href="eat">
+                    <img class="img-fluid" src="/static/btn_for_foodies.png">
+                </a>
+                <p class="mt-2 bg-dark-alpha h6 text-white text-center text-italic">discover great yums and offers</p>
+            </div>
+        </div>
+        <div class="fixed-bottom d-flex h-10 align-items-center  bg-dark-alpha">
+            <div class="col-sm">
+                <p class="h5 text-center text-white">
+                    Coming soon - the yummiest deals on your phone!
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!---DESKTOP FORMAT--->
+    <div class="container-fluid none d-md-block ya-bg desktop">
+        <div class="d-flex h-25 align-items-end">
+            <div class="col-md">
+                <p class="h2 text-center text-white">
+                    Coming soon - the yummiest deals on your phone!
+                </p>
+            </div>
+        </div>
+
+        <div class="d-flex h-50 flex-row justify-content-around align-items-center">
+            <div class="col-md-5">
+                <a href="/act">
+                    <img class="img-fluid" src="/static/btn_for_restaurants.png">
+                </a>
+                <p class="mt-2 bg-dark-alpha h6 text-white text-center text-italic">grow your business with us</p>
+            </div>
+            <div class="col-md-5">
+                <a href="/eat">
+                    <img class="img-fluid" src="/static/btn_for_foodies.png">
+                </a>
+                <p class="mt-2 bg-dark-alpha h6 text-white text-center text-italic">discover great yums and offers</p>
+            </div>
+
         </div>
     </div>
 
