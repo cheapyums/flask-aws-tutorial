@@ -1,6 +1,7 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
     <style>
+
         html, body {
             height: 100%;
             margin: 0;
@@ -35,7 +36,7 @@
 
 
     <!---MOBILE FORMAT--->
-    <div class="container-fluid d-sm-none ya-bg mobile">
+    <div class="container-fluid d-sm-none ya-bg mobile h-100">
         <div class="d-flex h-50 flex-column justify-content-around align-items-center pt-5">
             <div class="col-12">
                 &nbsp;
@@ -63,7 +64,7 @@
     </div>
 
     <!---DESKTOP FORMAT--->
-    <div class="container-fluid d-none d-sm-block ya-bg desktop">
+    <div class="container-fluid d-none d-sm-block ya-bg h-100">
         <div class="d-flex h-25 align-items-end">
             <div class="col-md">
                 <p class="h3 text-center text-white">
