@@ -1,13 +1,26 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
-    
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow-y:hidden;
+        }
+
+    </style>
+
     <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a class="navbar-brand" href="#"><img class="img-responsive" src="/static/logo_long_sm.png"></a>
+        <a class="navbar-brand" href="/"><img class="img-responsive" src="/static/logo_long_sm.png"></a>
     </nav>
 
-    <div class="container-fluid">
-        <div class="h3 text-center pt-4 pb-2">
-            {{ message }}
+    <div class="container-fluid border h-100">
+        <div class="d-flex justify-content-center h-75">
+            <div class="d-flex  col-10  align-items-center justify-content-center h-75 border rounded-lg border-secondary mt-5">
+                <div class="h3 text-center">
+                    {{ message }}
+                </div>
+            </div>
         </div>
     </div>
 
