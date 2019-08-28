@@ -33,7 +33,7 @@ def info():
             error = True
             flash("Please provide your name")
 
-        if not re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", data["email"]):
+        if data["email"] == "" or (not re.match(r"[^@\s]+@[^@\s]+\.[a-zA-Z0-9]+$", data["email"])):
             error = True
             flash("Please provide a valid email address.")
 
@@ -47,7 +47,8 @@ def info():
         db.session.add(lead)
         db.session.commit()
         db.session.close()
-        return "Thank you very much. We will be contacting you shortly!"
+
+        return render_template("message.html", message = "Thank you very much. We will be contacting you shortly!")
 
 @application.route("/eat", methods=['GET', 'POST'])
 def clientinfo():
