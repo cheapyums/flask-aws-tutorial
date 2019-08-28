@@ -2,78 +2,124 @@
 {% block content %}
 <style>
 
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:active
+    .btn-primary:focus {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+
+
+    .bg-dark-alpha{
+            background: rgba(0,0,0,0.5);
+        }
+
+    .h-10{
+        height: 10%;
+    }
+
 </style>
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light">
+        <a class="navbar-brand" href="#"><img class="img-responsive" src="/static/logo_long_sm.png"></a>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="h3 text-center pt-4 pb-2">
+            More customers when your restaurant needs them!
+        </div>
+
+        <form action="/act" method="post">
+            <div class="d-flex">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="restaurant" class="h6 text-secondary">RESTAURANT NAME:</label>
+                        <input type="text" VALUE="{{ data.restaurant }}" class="form-control" name="restaurant" aria-describedby="restaurantHelp">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-around">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="manager" class="h6 text-secondary">YOUR NAME:</label>
+                        <input type="text" VALUE="{{ data.manager }}" class="form-control" name="manager" aria-describedby="managerHelp">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="zipcode" class="h6 text-secondary">ZIP CODE:</label>
+                        <input type="text" VALUE="{{ data.zipcode }}" class="form-control" name="zipcode" aria-describedby="zipcodeHelp">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="email" class="h6 text-secondary">EMAIL:</label>
+                        <input type="email" VALUE="{{ data.email }}" class="form-control" name="email" aria-describedby="emailHelp">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="phone" class="h6 text-secondary">PHONE NO:</label>
+                        <input type="tel" VALUE="{{ data.phone }}" class="form-control" name="phone" aria-describedby="phoneHelp">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around mb-5">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block text-white shadow">SIGN UP TO LEARN MORE</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="fixed-bottom d-flex h-10 align-items-center  bg-dark-alpha">
+                <div class="col-sm">
+                    <p class="h5 text-center text-white">
+                        No set-up or subscription fees
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
+    {% if messages %}
+    <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="flashes">
+                            {% for message in messages %}
+                            <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#exampleModal').modal('toggle');
+            });
+        </script>
+    {% endif %}
     {% endwith %}
-
-    <DIV STYLE="width: 100%; text-align: center">
-        <IMG SRC="/static/logo_and_name.png">
-    </DIV>
-
-    <DIV STYLE="text-align: center">
-        <H3>
-            Drive more foot traffic to your restaurant, whenever you need it!<BR><BR>
-        </H3>
-    </DIV>
-
-    <FORM ACTION="/act" METHOD="post">
-        <TABLE class="form" width="400" ALIGN="center">
-            <TR>
-                <TD COLSPAN="3">
-                    RESTAURANT NAME:<BR>
-                    <INPUT TYPE="text" NAME="restaurant" SIZE="70" VALUE="{{ data.restaurant }}">
-                </TD>
-            </TR>
-            <TR><TD>&nbsp;</TD></TR>
-            <TR>
-                <TD width="200">
-                    YOUR NAME:<BR>
-                    <INPUT TYPE="text" NAME="manager" SIZE="38" VALUE="{{ data.manager }}">
-                </TD>
-                <TD WIDTH="20">
-                    &nbsp;
-                </TD>
-                <TD width="180">
-                    ZIP CODE:<BR>
-                    <INPUT TYPE="text" NAME="zipcode" SIZE="30" VALUE="{{ data.zipcode }}">
-                </TD>
-            </TR>
-            <TR><TD>&nbsp;</TD></TR>
-            <TR>
-                <TD width="200">
-                    EMAIL:<BR>
-                    <INPUT TYPE="text" NAME="email" SIZE="38" VALUE="{{ data.email }}">
-                </TD>
-                <TD WIDTH="20">
-                    &nbsp;
-                </TD>
-                <TD width="180">
-                    PHONE NO:<BR>
-                    <INPUT TYPE="text" NAME="phone" SIZE="30" VALUE="{{ data.phone }}">
-                </TD>
-            </TR>
-            <TR><TD>&nbsp;</TD></TR>
-            <TR>
-                <TD COLSPAN="3" align="center">
-                    <INPUT TYPE="submit" class="fsSubmitButton">
-                </TD>
-            </TR>
-        </TABLE>
-    </FORM>
-
-    <BR><BR>
-
-    <DIV STYLE="text-align: center">
-        <H4>
-            As your growth partner, we only make money when you make money!
-        </H4>
-    </DIV>
 
 {% endblock %}
