@@ -76,6 +76,10 @@ def clientinfo():
             error = True
             flash("Please provide a valid email address.")
 
+        if data["zipcode"] == "":
+            error = True
+            flash("Please provide your zip code so we can identify offers near you.")
+
         if error:
             return render_template("consumer_lead.html", data=data)
 
