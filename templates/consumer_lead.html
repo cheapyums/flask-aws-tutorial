@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% import 'macros.html' as macros %}
+{% block content %}
+<style>
+
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:active
+    .btn-primary:focus {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+
+
+    .bg-dark-alpha{
+            background: rgba(0,0,0,0.5);
+        }
+
+    .h-10{
+        height: 10%;
+    }
+</style>
+    {% include "navbar.html" %}
+
+
+    <div class="container-fluid">
+        <div class="h3 text-center pt-4 pb-2">
+            Find the yummiest and best restaurant deals near you!
+        </div>
+
+        <form action="/eat" method="post">
+            <div class="d-flex justify-content-around">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="name" class="h6 text-secondary">YOUR NAME *</label>
+                        <input type="text" VALUE="{{ data.name }}" class="form-control" name="name" aria-describedby="nameHelp">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="zipcode" class="h6 text-secondary">ZIP CODE</label>
+                        <input type="text" VALUE="{{ data.zipcode }}" class="form-control" name="zipcode" aria-describedby="zipcodeHelp">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <label for="email" class="h6 text-secondary">EMAIL *</label>
+                        <input type="email" VALUE="{{ data.email }}" class="form-control" name="email" aria-describedby="emailtHelp">
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex justify-content-around mb-5">
+                <div class="col-sm">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block text-white shadow">SIGN UP TO GET YUMMY DEALS</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+        <div class="fixed-bottom d-flex h-10 align-items-center  bg-dark-alpha">
+                <div class="col-sm">
+                    <p class="h5 text-center text-white">
+                        Join for FREE to start saving money when eating out!
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Attention Required</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="flashes">
+                            {% for message in messages %}
+                            <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#exampleModal').modal('toggle');
+            });
+        </script>
+    {% endif %}
+    {% endwith %}
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask import render_template, request, send_file, session, redirect, flash
 from application import db
-from application.models import Restaurant, Offer, Award, RestaurantLead, CustomerLead
+from application.models import Restaurant, Offer, Award, RestaurantLead, ConsumerLead
 from datetime import datetime
 import qrcode
 import cStringIO
@@ -59,7 +59,7 @@ def info():
 @application.route("/eat", methods=['GET', 'POST'])
 def clientinfo():
     if request.method == "GET":
-        return render_template("customer_lead.html", data={})
+        return render_template("consumer_lead.html", data={})
     if request.method == "POST":
         data = {
             "name": request.form.get("name", ""),
@@ -77,9 +77,9 @@ def clientinfo():
             flash("Please provide a valid email address.")
 
         if error:
-            return render_template("customer_lead.html", data=data)
+            return render_template("consumer_lead.html", data=data)
 
-        lead = CustomerLead(data["name"],data["email"], data["zipcode"])
+        lead = ConsumerLead(data["name"],data["email"], data["zipcode"])
         db.session.add(lead)
         db.session.commit()
         db.session.close()
@@ -274,7 +274,6 @@ def redeemOffer(restaurant, awardCode):
 @application.route('/index', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
-    return ""
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')
