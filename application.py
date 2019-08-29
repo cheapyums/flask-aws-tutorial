@@ -83,7 +83,7 @@ def clientinfo():
         db.session.add(lead)
         db.session.commit()
         db.session.close()
-        return "Thank you very much. We will be contacting you shortly!"
+        return render_template("message.html", message="Thank you very much. We will be contacting you shortly!")
 
 
 @application.route("/host")
