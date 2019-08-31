@@ -7,7 +7,7 @@ from app import application
 from application import db
 from application.models import Restaurant, Offer, Award, User
 from coupon_encoder import CouponEncoder
-from cheapyums.core.utils import convertUTCToTimezone
+from yumsapp.core.utils import convertUTCToTimezone
 
 
 @application.route("/a/login", methods=['GET', 'POST'])
