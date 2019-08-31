@@ -7,7 +7,7 @@ import cStringIO
 import random
 import re
 from app import application
-from cheapyums.core.utils import convertUTCToTimezone
+from yumsapp.core.utils import convertUTCToTimezone
 
 
 import admintasks
