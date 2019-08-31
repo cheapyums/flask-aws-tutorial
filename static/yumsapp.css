@@ -1,0 +1,15 @@
+.bg-dark-alpha{
+    background: rgba(0,0,0,0.5);
+}
+
+.h-10{
+    height: 10%;
+}
+
+.ontop{
+    z-index: 9999;
+}
+
+.border-3 {
+    border-width: 3px !important;
+}
