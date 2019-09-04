@@ -230,16 +230,24 @@ def restaurantMain(restaurant):
 
     return render_template("restaurant_main.html", data=data)
 
+@application.route("/r/<restaurant>/award/<awardCode>")
+def viewRestaurantAward(restaurant, awardCode):
+    db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
+    if not restaurantIsSignedIn(restaurant):
+        return redirect("/r/signin")
+
+    awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
+    if awd is None:
+        return render_template("message.html", message="This offer is not valid in this establishment.")
+
+    return render_template("award_details.html", award = awd, message="yum")
 
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    if "restaurant" not in session or "loggedIn" not in session:
-        return "Only restaurants can process award redemptions.  If you are a restaurant, please log in!"
-
-    if session["restaurant"] != restaurant or session["loggedIn"] != True:
-        return "Only restaurants can process award redemptions.  If you are a restaurant, please log in!"
+    if not restaurantIsSignedIn(restaurant):
+        return redirect("/r/signin")
 
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
@@ -302,13 +310,24 @@ def redeemOffer(restaurant, awardCode):
     db.session.commit()
     db.session.close()
 
-    return "Offer has been accepted.  Total offer value: {0}".format(offerValue)
+    return redirect("/r/{0}/award/{1}".format(restaurant,awardCode))
 
 
 @application.route('/', methods=['GET', 'POST'])
 @application.route('/index', methods=['GET', 'POST'])
 def index():
     return render_template("index.html")
+
+
+def restaurantIsSignedIn(restaurant):
+    if "restaurant" not in session or "loggedIn" not in session:
+        return False
+
+    if session["restaurant"] != restaurant or session["loggedIn"] != True:
+        return False
+
+    return True
+
 
 if __name__ == '__main__':
     application.run(host='0.0.0.0')

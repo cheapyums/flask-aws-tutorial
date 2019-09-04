@@ -9,6 +9,18 @@
             background-color: #ffc107 !important;
             border-color: #ffc107 !important;
         }
+
+        .modal-dialog {
+              min-height: calc(100vh - 60px);
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              overflow: auto;
+              @media(max-width: 768px) {
+                min-height: calc(100vh - 20px);
+              }
+        }
+
     </style>
 
     {% include "navbar.html" %}

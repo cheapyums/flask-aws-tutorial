@@ -12,10 +12,11 @@ def format_valueIfNone(value, valueIfNone=""):
         return valueIfNone
     return value
 
-def format_datetime(value, valueIfNone=""):
+def format_datetime(value, valueIfNone="", format="%m-%d-%Y"):
     if value is None:
         return valueIfNone
-    return value.strftime('%m-%d-%Y')
+    return value.strftime(format)
+
     '''
     if format == 'full':
         format="EEEE, d. MMMM y 'at' HH:mm"
