@@ -1,50 +1,61 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %} 
 {% block content %}
+   <style>
 
-<div class="col-md-4 col-md-offset-4">
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
-      <div align="center">
-        <h2>Cheap Yums</h2>
-      </div>
+        .col-pixel-width-300{
+            flex: 0 0 300px;
+        }
 
-<hr>
-    If you are a restaurant, please enter your user name and password to log in. <BR><BR>
-    <form action = "{{ path }}" method="post">
-        <div align="center">
-            <TABLE>
-                <TR>
-                    <TD width="130">
-                        <B>User Name:</B>
-                    </TD>
-                    <TD width="100">
-                        <input type="text" name="username"  style="width: 170px;"/>
-                    </TD>
-                </TR>
-                <TR>
-                    <TD>
-                        &nbsp;
-                    </TD>
-                </TR>
-                <TR>
-                    <TD width="130">
-                        <B>Password:</B>
-                    </TD>
-                    <TD width="100">
-                        <input type="password" name="password"  style="width: 170px;"/>
-                    </TD>
-                </TR>
-            </TABLE>
+   </style>
+
+    {% include "navbar.html" %}
+
+    <div class="container-fluid h-75">
+        <div class="d-flex h-100 flex-column col-12 justify-content-around align-items-center p-none m-0 pt-5">
+            <div class="d-flex col-10 col-sm-9 col-md-8 col-lg-7 col-xl-6 justify-content-center">
+                <div class="border border-3 col-pixel-width-300">
+                    <div class="h3 text-center font-italic pt-4 pb-2">
+                        Sign-in
+                    </div>
+
+                    <form action="{{ path }}" method="post">
+
+                        <div class="d-flex">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="username" class="h6 text-secondary">USER NAME:</label>
+                                    <input type="text" VALUE="" class="form-control" name="username" aria-describedby="usernameHelp">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="password" class="h6 text-secondary">PASSWORD:</label>
+                                    <input type="password" VALUE="" class="form-control" name="password" aria-describedby="passwordHelp">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-around mt-3 mb-3">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block text-white shadow">Sign-in</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
         </div>
-        <BR>
-        <BR>
+    </div>
 
-        <div align="center">
-        <input type="submit">
-        </div>
-
-    </form>
-
-
-</div>
 
 {% endblock %}  
