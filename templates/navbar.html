@@ -2,7 +2,11 @@
         <a class="navbar-brand" href="/"><img class="img-responsive" src="/static/logo_long_sm.png"></a>
         <ul class="navbar-nav flex-row ml-auto d-md-flex">
             <li class="nav-item">
-                <a class="nav-link " href="/r/login">Sign In</a>
+                {% if "restaurant" in session %}
+                <a class="nav-link " href="/r/signout">Sign Out</a>
+                {% else %}
+                <a class="nav-link " href="/r/signin">Sign In</a>
+                {% endif %}
             </li>
         </ul>
     </nav>

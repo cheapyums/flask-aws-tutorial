@@ -177,14 +177,14 @@ def QRCode(restaurant, awardCode):
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
 
-@application.route("/r/login", methods=['GET', 'POST'])
-def logIn():
+@application.route("/r/signin", methods=['GET', 'POST'])
+def signIn():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
     if "restaurant" in session and session["loggedIn"] == True:
         restaurant = session["restaurant"]
         res = Restaurant.query.filter_by(code=restaurant).first()
         if res is None:
-            return render_template("login.html", path="/r/login")
+            return render_template("signin.html", path="/r/signin")
         return "You are now logged in as {0}".format(res.name)
 
     if request.method == "POST":
@@ -192,14 +192,21 @@ def logIn():
         password = request.form.get("password", "")
         res = Restaurant.query.filter_by(code=username).first()
         if res is None:
-            return redirect("/r/login")
+            return redirect("/r/signin")
         if res.password == password:
             session["restaurant"] = username
             session["loggedIn"] = True
             return "You are now logged in as {0}".format(res.name)
         else:
-            return redirect("/r/login")
-    return render_template("login.html", path="/r/login")
+            return redirect("/r/signin")
+    return render_template("signin.html", path="/r/signin")
+
+@application.route("/r/signout")
+def signOut():
+    db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
+    del session["restaurant"]
+    session["loggedIn"] = False
+    return redirect("/")
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):

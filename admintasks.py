@@ -38,13 +38,12 @@ def adminLogIn():
 @application.route("/admin/restaurant/add")
 def addRestaurant():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    r = Restaurant("mama-coco", "Mama Coco", "America/Los_Angeles", "fC4We0ggwe4tsftswoh", None, None, "12:30", "14:00",
+    r = Restaurant("mama-coco", "Mama Coco", "America/Los_Angeles", "mcya", None, None, "12:30", "14:00",
                    "19:00", "20:00")
     db.session.add(r)
     db.session.commit()
     db.session.close()
     return ""
-
 
 @application.route("/admin/<restaurant>/offer/add")
 def addOffer(restaurant):
