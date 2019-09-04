@@ -43,13 +43,18 @@
                                 <th scope="col">
                                     Offer Value (%)
                                 </th>
+                                <th scope="col">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
 
                         {% for award in offer["awards"] %}
-                            <tr>
+                            <tr class="border">
                                 <td>
-                                    {{ award.code }}
+                                    <a href="/r/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
+                                        {{ award.code }}
+                                    </a>
                                 </td>
                                 <td>
                                     {{ award.award_ts|datetime(restaurant.timezone,"%m-%d-%Y at %-I:%M %p") }}
@@ -65,6 +70,15 @@
                                 </td>
                                 <td>
                                     {{ award.offer_percent|valueIfNone("TBD") }}
+                                </td>
+                                <td>
+                                    {% if award.customers != None %}
+                                    <a href="/a/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            View Award
+                                        </button>
+                                    </a>
+                                    {% endif %}
                                 </td>
 
                             </tr>
