@@ -252,19 +252,19 @@ def redeemOffer(restaurant, awardCode):
 
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
-        return "This offer is not valid in this establishment."
+        return render_template("message.html", message="This offer is not valid in this establishment.")
 
     off = Offer.query.filter_by(code=awd.offer_code, restaurant_code=restaurant).first()
     if off is None:
-        return "This offer is not valid in this establishment."
+        return render_template("message.html", message="This offer is not valid in this establishment.")
 
     res = Restaurant.query.filter_by(code=restaurant).first()
     if res is None:
-        return "This offer is not valid in this establishment."
+        return render_template("message.html", message="This offer is not valid in this establishment.")
 
     if awd.status == "REDEEMED":
         dt = convertUTCToTimezone(awd.redemption_ts, res.timezone)
-        return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode, "This award had already been previously redeemed.  The award details are shown here."))
+        return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode, "This award has already been processed in the past. The award details are shown here."))
 
     now = convertUTCToTimezone(datetime.utcnow(), res.timezone)
 
