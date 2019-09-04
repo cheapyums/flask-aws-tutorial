@@ -1,32 +1,56 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %} 
 {% block content %}
+   <style>
 
-<div class="col-md-4 col-md-offset-4">
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
 
-      <div align="center">
-        <h2>Cheap Yums</h2>
-      </div>
+        .col-pixel-width-400{
+            flex: 0 0 400px;
+        }
 
-<hr>
-    To customize your offer, please specify the number of people in your party. (Maximum: {{ maxCustomers }})<BR><BR>
-    <B>Please note:</B> If you don't specify the number of people in your party correcly, the restaurant may refuse to honor your award.<BR><BR>
-    <form action = "{{ updateURL }}" method="post">
-        <TABLE>
-            <TR>
-                <TD width="170">
-                    <B>People in your party</B>
-                </TD>
-                <TD width="100">
-                    <input type="number" name="customers" min="1" max="{{ maxCustomers }}" style="width: 100px;"/>
-                </TD>
-            </TR>
-        </TABLE>
-        <BR>
+   </style>
 
-        <input type="submit">
-    </form>
+    {% include "navbar.html" %}
 
+    <div class="container-fluid h-75">
+        <div class="d-flex h-100 flex-column col-12 justify-content-around align-items-center p-none m-0 pt-5">
+            <div class="d-flex col-10 col-sm-9 col-md-8 col-lg-7 col-xl-6 justify-content-center">
+                <div class="border border-3 col-pixel-width-400 p-4">
+                    <div class="h3 text-center font-italic pt-4 pb-2">
+                        Customize Offer
+                    </div>
+                    <p class="text-justify">
+                        To customize your offer, please specify the number of people in your party. (Maximum: {{ maxCustomers }})
+                    </p>
+                    <p class="text-justify">
+                        <B>Please note:</B> If you don't specify the number of people in your party correcly, the restaurant may refuse to honor your award.
+                    </p>
+                    <form action="{{ updateURL }}" method="post">
 
-</div>
+                        <div class="d-flex">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="customers" class="h6 text-secondary">PEOPLE IN YOUR PARTY:</label>
+                                    <input type="number" class="form-control" name="customers" min="1" max="{{ maxCustomers }}"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-around mt-3 mb-3">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg btn-block text-white shadow">Customize Offer</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}  
