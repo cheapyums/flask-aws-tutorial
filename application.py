@@ -180,7 +180,7 @@ def QRCode(restaurant, awardCode):
 @application.route("/r/signin", methods=['GET', 'POST'])
 def signIn():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    if "restaurant" in session and session["loggedIn"] == True:
+    if "restaurant" in session and session["loggedIn"] is True:
         restaurant = session["restaurant"]
         res = Restaurant.query.filter_by(code=restaurant).first()
         if res is None:
@@ -194,9 +194,10 @@ def signIn():
         if res is None:
             return redirect("/r/signin")
         if res.password == password:
+            session["restaurantName"] = res.name
             session["restaurant"] = username
             session["loggedIn"] = True
-            return "You are now logged in as {0}".format(res.name)
+            return redirect("/r/{0}".format(username))
         else:
             return redirect("/r/signin")
     return render_template("signin.html", path="/r/signin")
@@ -204,9 +205,32 @@ def signIn():
 @application.route("/r/signout")
 def signOut():
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
-    del session["restaurant"]
+    if "restaurant" in session:
+        del session["restaurant"]
+    if "restaurantName" in session:
+        del session["restaurantName"]
     session["loggedIn"] = False
     return redirect("/")
+
+@application.route("/r/<restaurant>")
+def restaurantMain(restaurant):
+    db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
+    if "restaurant" not in session or "loggedIn" not in session:
+        return redirect("/r/signin")
+
+    #List all awards
+    data = []
+    offers = Offer.query.filter_by(restaurant_code = restaurant).all()
+    for offer in offers:
+        awards = Award.query.filter_by(restaurant_code=restaurant, offer_code=offer.code).all()
+        d = {}
+        d["offer"] = offer
+        d["awards"] = awards
+        data.append(d)
+
+    return render_template("restaurant_main.html", data=data)
+
+
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
 def redeemOffer(restaurant, awardCode):

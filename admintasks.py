@@ -17,7 +17,7 @@ def adminLogIn():
         admin = session["admin"]
         usr = User.query.filter_by(username=admin).first()
         if usr is None:
-            return render_template("login.html", path="/a/login")
+            return render_template("signin.html", path="/a/login")
         return "You are now logged in as Admin {0}".format(usr.name)
 
     if request.method == "POST":
@@ -32,7 +32,7 @@ def adminLogIn():
             return "You are now logged in as {0}".format(usr.name)
         else:
             return redirect("/a/login")
-    return render_template("login.html", path="/a/login")
+    return render_template("signin.html", path="/a/login")
 
 '''
 @application.route("/admin/restaurant/add")
