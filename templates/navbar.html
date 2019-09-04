@@ -3,14 +3,14 @@
         <ul class="navbar-nav flex-row ml-auto d-md-flex">
             {% if "restaurant" in session %}
             <li class="nav-item">
-                <a class="nav-link " href="/r/{{session["restaurant"]}}">{{ session["restaurantName"] }}</a>
+                <a class="nav-link pr-3" href="/r/{{session["restaurant"]}}">{{ session["restaurantName"] }}</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " href="/r/signout">Sign Out</a>
+                <a class="nav-link" href="/r/signout">Sign Out</a>
             </li>
             {% else %}
             <li class="nav-item">
-                <a class="nav-link " href="/r/signin">Sign In</a>
+                <a class="nav-link" href="/r/signin">Sign In</a>
             </li>
             {% endif %}
         </ul>
