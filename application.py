@@ -172,7 +172,7 @@ def QRCode(restaurant, awardCode):
         return ""
 
     img_buf = cStringIO.StringIO()
-    img = qrcode.make("http://www.cheapyums.com/r/{0}/redemption/{1}".format(restaurant,awardCode))
+    img = qrcode.make("http://www.yumsapp.com/r/{0}/redemption/{1}".format(restaurant,awardCode))
     img.save(img_buf)
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
