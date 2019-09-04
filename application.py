@@ -221,6 +221,7 @@ def restaurantMain(restaurant):
     #List all awards
     data = []
     offers = Offer.query.filter_by(restaurant_code = restaurant).all()
+    res = Restaurant.query.filter_by(code=restaurant).first()
     for offer in offers:
         awards = Award.query.filter_by(restaurant_code=restaurant, offer_code=offer.code).all()
         d = {}
@@ -228,7 +229,7 @@ def restaurantMain(restaurant):
         d["awards"] = awards
         data.append(d)
 
-    return render_template("restaurant_main.html", data=data)
+    return render_template("restaurant_main.html", data=data, restaurant=res)
 
 @application.route("/r/<restaurant>/award/<awardCode>")
 def viewRestaurantAward(restaurant, awardCode):
@@ -237,11 +238,12 @@ def viewRestaurantAward(restaurant, awardCode):
         return redirect("/r/signin")
 
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
-    if awd is None:
+    res = Restaurant.query.filter_by(code=restaurant).first()
+    if awd is None or res is None:
         return render_template("message.html", message="This offer is not valid in this establishment.")
 
     message =request.args.get("message",None)
-    return render_template("award_details.html", award = awd, message=message)
+    return render_template("award_details.html", award = awd, restaurant=res, message=message)
 
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")

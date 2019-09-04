@@ -1,4 +1,5 @@
 from flask import Flask
+from yumsapp.core.utils import convertUTCToTimezone
 
 # Elastic Beanstalk initalization
 application = Flask(__name__)
@@ -12,10 +13,12 @@ def format_valueIfNone(value, valueIfNone=""):
         return valueIfNone
     return value
 
-def format_datetime(value, valueIfNone="", format="%m-%d-%Y"):
+def format_datetime(value,timezone=None,format="%m-%d-%Y",valueIfNone=""):
     if value is None:
         return valueIfNone
-    return value.strftime(format)
+    if timezone is None:
+        return value.strftime(format)
+    return convertUTCToTimezone(value, timezone).strftime(format)
 
 '''
     if format == 'full':
