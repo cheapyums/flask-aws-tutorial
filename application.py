@@ -8,6 +8,7 @@ import random
 import re
 from app import application
 from yumsapp.core.utils import convertUTCToTimezone
+from coupon_encoder import CouponEncoder
 
 
 import admintasks
@@ -230,6 +231,43 @@ def restaurantMain(restaurant):
         data.append(d)
 
     return render_template("restaurant_main.html", data=data, restaurant=res)
+
+@application.route("/r/<restaurant>/offer/<offerCode>/issueaward")
+def issueRestaurantAward(restaurant, offerCode):
+    db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
+
+    if not restaurantIsSignedIn(restaurant):
+        return redirect("/r/signin")
+
+    off = Offer.query.filter_by(code=offerCode, restaurant_code=restaurant).first()
+    if off is None:
+        return "Error: Invalid Offer.  Offer does not exist."
+
+    res = Restaurant.query.filter_by(code=restaurant).first()
+    if res is None:
+        return "Error: Invalid Restaurant"
+
+    if off.valid_end_date < convertUTCToTimezone(datetime.utcnow(), res.timezone).date():
+        return "Error: Offer Expired."
+
+    if off.status != "ACTIVE":
+        return "Error: Offer is not Active."
+
+    c = CouponEncoder('10BEH8G426RADWZVF9JPKX5QMC3YTN7S')
+
+    while True:
+        awardCode = c.encode(random.randrange(1, 150000000), num_digits=8)
+        awd = Award(awardCode, restaurant, offerCode, None, datetime.utcnow())
+        try:
+            db.session.add(awd)
+            db.session.commit()
+            db.session.close()
+            host = "www.yumsapp.com"
+            return redirect("http://{0}/a/{1}/award/{2}".format(host, restaurant, awardCode))
+        except:
+            db.session.rollback()
+            print "Error: Award Code already Exists.  Generating new code."
+
 
 @application.route("/r/<restaurant>/award/<awardCode>")
 def viewRestaurantAward(restaurant, awardCode):

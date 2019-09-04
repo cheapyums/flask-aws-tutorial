@@ -17,77 +17,91 @@
         </div>
 
         {% for offer in data %}
-            <div class="h3">
-                {{ offer["offer"].code }}
+            <div class="d-flex justify-content-between pt-5">
+                <div class="h3 col-5">
+                    {{ offer["offer"].code }}
+                </div>
+                <div class="col-2">
+                    <a href="/r/{{ restaurant.code }}/offer/{{ offer["offer"].code }}/issueaward" target="_blank">
+                        <button type="button" class="btn btn-primary btn-sm btn-block">
+                            Issue This Award
+                        </button>
+                    </a>
+                </div>
             </div>
-            <div class="row flex-row flex-nowrap">
                 {% if  offer["awards"]|length > 0 %}
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">
-                                    Code
-                                </th>
-                                <th scope="col">
-                                    Issued
-                                </th>
-                                <th scope="col">
-                                    Status
-                                </th>
-                                <th scope="col">
-                                    Party Size
-                                </th>
-                                <th scope="col">
-                                    Redemption Date
-                                </th>
-                                <th scope="col">
-                                    Offer Value (%)
-                                </th>
-                                <th scope="col">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
+                    <div class="row flex-row flex-nowrap">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        Code
+                                    </th>
+                                    <th scope="col">
+                                        Issued
+                                    </th>
+                                    <th scope="col">
+                                        Status
+                                    </th>
+                                    <th scope="col">
+                                        Party Size
+                                    </th>
+                                    <th scope="col">
+                                        Redemption Date
+                                    </th>
+                                    <th scope="col">
+                                        Offer Value (%)
+                                    </th>
+                                    <th scope="col">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
 
-                        {% for award in offer["awards"] %}
-                            <tr class="border">
-                                <td>
-                                    <a href="/r/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
-                                        {{ award.code }}
-                                    </a>
-                                </td>
-                                <td>
-                                    {{ award.award_ts|datetime(restaurant.timezone,"%m-%d-%Y at %-I:%M %p") }}
-                                </td>
-                                <td>
-                                    {{ award.status }}
-                                </td>
-                                <td>
-                                    {{ award.customers|valueIfNone("TBD") }}
-                                </td>
-                                <td>
-                                    {{ award.redemption_ts|datetime(restaurant.timezone,"%m-%d-%Y at %-I:%M %p") }}
-                                </td>
-                                <td>
-                                    {{ award.offer_percent|valueIfNone("TBD") }}
-                                </td>
-                                <td>
-                                    {# {% if award.customers != None %} #}
-                                    <a href="/a/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            View Award
-                                        </button>
-                                    </a>
-                                    {# {% endif %} #}
-                                </td>
+                            {% for award in offer["awards"] %}
+                                <tr class="border">
+                                    <td>
+                                        <a href="/r/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
+                                            {{ award.code }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {{ award.award_ts|datetime(restaurant.timezone,"%m-%d-%Y at %-I:%M %p") }}
+                                    </td>
+                                    <td>
+                                        {{ award.status }}
+                                    </td>
+                                    <td>
+                                        {{ award.customers|valueIfNone("TBD") }}
+                                    </td>
+                                    <td>
+                                        {{ award.redemption_ts|datetime(restaurant.timezone,"%m-%d-%Y at %-I:%M %p") }}
+                                    </td>
+                                    <td>
+                                        {{ award.offer_percent|valueIfNone("TBD") }}
+                                    </td>
+                                    <td>
+                                        {# {% if award.customers != None %} #}
+                                        <a href="/a/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
+                                            <button type="button" class="btn btn-primary btn-sm">
+                                                View Award
+                                            </button>
+                                        </a>
+                                        {# {% endif %} #}
+                                    </td>
 
-                            </tr>
-                        {% endfor %}
-                    </table>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    </div>
                 {% else %}
-                    No awards found for this offer
+                <div class="row flex-row flex-nowrap">
+                    <div class="pl-4">
+                        No awards found for this offer
+                    </div>
+                </div>
                 {% endif %}
-            </div>
+
         {% endfor %}
     </div>
 {% endblock %}
