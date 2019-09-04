@@ -72,13 +72,13 @@
                                     {{ award.offer_percent|valueIfNone("TBD") }}
                                 </td>
                                 <td>
-                                    {% if award.customers != None %}
+                                    {# {% if award.customers != None %} #}
                                     <a href="/a/{{ restaurant.code }}/award/{{ award.code }}" target="_blank">
                                         <button type="button" class="btn btn-primary btn-sm">
                                             View Award
                                         </button>
                                     </a>
-                                    {% endif %}
+                                    {# {% endif %} #}
                                 </td>
 
                             </tr>
