@@ -5,6 +5,7 @@
         html, body {
             height: 100%;
             margin: 0;
+            min-width: 800px;
         }
 
         .col-pixel-width-300{
@@ -14,7 +15,7 @@
    </style>
 
     {% include "navbar.html" %}
-    <div class="container-fluid h-75">
+    <div class="container-fluid">
         <div class="h1 my-4">
             Awards
         </div>
@@ -23,55 +24,60 @@
             <div class="h3">
                 {{ offer["offer"].code }}
             </div>
-            {% if  offer["awards"]|length > 0 %}
-                <table class="border border-3">
-                    <tr class="border-bottom">
-                        <td class="pr-4">
-                            Code
-                        </td>
-                        <td class="px-4">
-                            Issued
-                        </td>
-                        <td class="px-4">
-                            Status
-                        </td>
-                        <td class="px-4">
-                            Party Size
-                        </td>
-                        <td class="px-4">
-                            Redemption Date
-                        </td>
-                        <td class="px-4">
-                            Offer Value (%)
-                        </td>
-                    </tr>
-                    {% for award in offer["awards"] %}
-                        <tr>
-                            <td class="pr-4">
-                                {{ award.code }}
-                            </td>
-                            <td class="px-4">
-                                {{ award.award_ts|datetime }}
-                            </td>
-                            <td class="px-4">
-                                {{ award.status }}
-                            </td>
-                            <td class="px-4">
-                                {{ award.customers|valueIfNone("TBD") }}
-                            </td>
-                            <td class="px-4">
-                                {{ award.redemption_ts|datetime }}
-                            </td>
-                            <td class="px-4">
-                                {{ award.offer_percent|valueIfNone("TBD") }}
-                            </td>
+            <div class="row flex-row flex-nowrap">
+                {% if  offer["awards"]|length > 0 %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Code
+                                </th>
+                                <th scope="col">
+                                    Issued
+                                </th>
+                                <th scope="col">
+                                    Status
+                                </th>
+                                <th scope="col">
+                                    Party Size
+                                </th>
+                                <th scope="col">
+                                    Redemption Date
+                                </th>
+                                <th scope="col">
+                                    Offer Value (%)
+                                </th>
+                            </tr>
+                        </thead>
 
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% else %}
-                No awards found for this offer
-            {% endif %}
+                        {% for award in offer["awards"] %}
+                            <tr>
+                                <td>
+                                    {{ award.code }}
+                                </td>
+                                <td>
+                                    {{ award.award_ts|datetime }}
+                                </td>
+                                <td>
+                                    {{ award.status }}
+                                </td>
+                                <td>
+                                    {{ award.customers|valueIfNone("TBD") }}
+                                </td>
+                                <td>
+                                    {{ award.redemption_ts|datetime }}
+                                </td>
+                                <td>
+                                    {{ award.offer_percent|valueIfNone("TBD") }}
+                                </td>
+
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    No awards found for this offer
+                {% endif %}
+            </div>
         {% endfor %}
     </div>
 {% endblock %}
