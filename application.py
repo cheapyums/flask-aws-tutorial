@@ -264,7 +264,7 @@ def redeemOffer(restaurant, awardCode):
 
     if awd.status == "REDEEMED":
         dt = convertUTCToTimezone(awd.redemption_ts, res.timezone)
-        return "This award was redeemed on {0} at {1}.<p>Total discount: {2}%<p>Number of Customers: {3}".format(dt.date(), dt.time(), awd.offer_percent, awd.customers)
+        return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode, "This award had already been previously redeemed.  The award details are shown here."))
 
     now = convertUTCToTimezone(datetime.utcnow(), res.timezone)
 
