@@ -102,7 +102,7 @@ def issueAward(restaurant, offerCode):
             db.session.add(awd)
             db.session.commit()
             db.session.close()
-            host = "www.cheapyums.com"
+            host = "www.yumsapp.com"
             return "http://{0}/a/{1}/award/{2}".format(host, restaurant, awardCode)
         except:
             db.session.rollback()
