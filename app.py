@@ -17,13 +17,13 @@ def format_datetime(value, valueIfNone="", format="%m-%d-%Y"):
         return valueIfNone
     return value.strftime(format)
 
-    '''
+'''
     if format == 'full':
         format="EEEE, d. MMMM y 'at' HH:mm"
     elif format == 'medium':
         format="EE dd.MM.y HH:mm"
     return babel.dates.format_datetime(value, format)
-    '''
+'''
 
 
 application.jinja_env.filters['datetime'] = format_datetime

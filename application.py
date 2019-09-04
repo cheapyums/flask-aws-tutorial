@@ -240,7 +240,8 @@ def viewRestaurantAward(restaurant, awardCode):
     if awd is None:
         return render_template("message.html", message="This offer is not valid in this establishment.")
 
-    return render_template("award_details.html", award = awd, message="yum")
+    message =request.args.get("message",None)
+    return render_template("award_details.html", award = awd, message=message)
 
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
@@ -310,7 +311,7 @@ def redeemOffer(restaurant, awardCode):
     db.session.commit()
     db.session.close()
 
-    return redirect("/r/{0}/award/{1}".format(restaurant,awardCode))
+    return redirect("/r/{0}/award/{1}?message={2}".format(restaurant,awardCode,"Award has been accepted"))
 
 
 @application.route('/', methods=['GET', 'POST'])
