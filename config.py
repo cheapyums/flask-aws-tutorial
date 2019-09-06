@@ -11,6 +11,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://admin:cydbadmin@cydb.csyohiqdr8hj.us-
 #SQLALCHEMY_DATABASE_URI = 'sqlite:///test.db'
 
 SQLALCHEMY_POOL_RECYCLE = 3600
+SQLALCHEMY_POOL_PRE_PING = True
 
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'dsaf0897sfdg45sfdgfdsaqzdf98sdf0a'
