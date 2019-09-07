@@ -63,7 +63,7 @@ class Award(db.Model):
     redemption_ts = db.Column(db.DateTime)
     offer_percent = db.Column(db.Integer)
 
-    def __init__(self, code, restaurant_code, offer_code,customers, award_ts, name, email, status = "ISSUED", redemption_ts = None, offer_percent = None):
+    def __init__(self, code, restaurant_code, offer_code,customers, award_ts, name="", email="", status = "ISSUED", redemption_ts = None, offer_percent = None):
         self.code = code
         self.restaurant_code = restaurant_code
         self.offer_code = offer_code
