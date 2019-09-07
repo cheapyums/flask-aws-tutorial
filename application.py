@@ -118,8 +118,12 @@ def viewAward(restaurant, awardCode):
             return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
         if request.method == "POST":
             cust = int(request.form.get("customers", 0))
+            name = request.form.get("name", "")
+            email = request.form.get("email", "")
             if 0 < cust <= off.max_customers:
                 awd.customers = cust
+                awd.name = name
+                awd.email = email
                 db.session.commit()
             else:
                 return render_template('pre_award.html', maxCustomers=off.max_customers, updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))

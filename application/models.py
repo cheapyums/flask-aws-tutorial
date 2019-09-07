@@ -56,17 +56,21 @@ class Award(db.Model):
     restaurant_code = db.Column(db.String(30), primary_key=True)
     offer_code = db.Column(db.String(30))
     customers = db.Column(db.Integer)
-    status = db.Column(db.String(30))
     award_ts = db.Column(db.DateTime)
+    name = db.Column(db.String(150))
+    email = db.Column(db.String(150))
+    status = db.Column(db.String(30))
     redemption_ts = db.Column(db.DateTime)
     offer_percent = db.Column(db.Integer)
 
-    def __init__(self, code, restaurant_code, offer_code,customers, award_ts, status = "ISSUED", redemption_ts = None, offer_percent = None):
+    def __init__(self, code, restaurant_code, offer_code,customers, award_ts, name, email, status = "ISSUED", redemption_ts = None, offer_percent = None):
         self.code = code
         self.restaurant_code = restaurant_code
         self.offer_code = offer_code
         self.customers = customers
         self.award_ts = award_ts
+        self.name = name
+        self.email = email
         self.status = status
         self.redemption_ts = redemption_ts
         self.offer_percent = offer_percent
