@@ -209,7 +209,6 @@ def signIn():
 
 @application.route("/r/signout")
 def signOut():
-    db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
     if "restaurant" in session:
         del session["restaurant"]
     if "restaurantName" in session:
