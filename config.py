@@ -12,7 +12,9 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://admin:cydbadmin@cydb.csyohiqdr8hj.us-
 
 SQLALCHEMY_POOL_RECYCLE = 3600
 SQLALCHEMY_POOL_PRE_PING = True
-SQLALCHEMY_ECHO = True
+#SQLALCHEMY_ECHO = True
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
 
 WTF_CSRF_ENABLED = True
 SECRET_KEY = 'dsaf0897sfdg45sfdgfdsaqzdf98sdf0a'

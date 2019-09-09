@@ -232,6 +232,7 @@ def restaurantMain(restaurant):
         d["offer"] = offer
         d["awards"] = awards
         data.append(d)
+    db.session.close()
 
     return render_template("restaurant_main.html", data=data, restaurant=res)
 
@@ -284,6 +285,7 @@ def viewRestaurantAward(restaurant, awardCode):
         return render_template("message.html", message="This offer is not valid in this establishment.")
 
     message =request.args.get("message",None)
+    db.session.close()
     return render_template("award_details.html", award = awd, restaurant=res, message=message)
 
 
