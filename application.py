@@ -7,15 +7,13 @@ import cStringIO
 import random
 import re
 from app import application
-from yumsapp.core.utils import convertUTCToTimezone
 from coupon_encoder import CouponEncoder
+from yumsapp.core.utils import convertUTCToTimezone
+from yumsapp.aws.smtp import sendEmail
 
 
-import admintasks
-
-
-#@application.route("/tst")
-#def tst():
+# @application.route("/tst")
+# def tst():
 #    return render_template("test.html")
 
 
@@ -50,12 +48,17 @@ def info():
         if error:
             return render_template("restaurant_lead.html", data=data)
 
-        lead = RestaurantLead(data["restaurant"],data["manager"], data["email"], data["phone"], data["zipcode"])
+        lead = RestaurantLead(data["restaurant"], data["manager"], data["email"], data["phone"], data["zipcode"])
         db.session.add(lead)
         db.session.commit()
         db.session.close()
 
-        return render_template("message.html", message = "Thank you very much. We will be contacting you shortly!")
+        sendEmail("team@yumsapp.com", "YumsApp Leads", "team@yumsapp.com", "New Restaurant Lead!",
+                  render_template("email_templates/restaurant_lead_text.html", data=data),
+                  render_template("email_templates/restaurant_lead_html.html", data=data))
+
+        return render_template("message.html", message="Thank you very much. We will be contacting you shortly!")
+
 
 @application.route("/eat", methods=['GET', 'POST'])
 def clientinfo():
@@ -84,7 +87,7 @@ def clientinfo():
         if error:
             return render_template("consumer_lead.html", data=data)
 
-        lead = ConsumerLead(data["name"],data["email"], data["zipcode"])
+        lead = ConsumerLead(data["name"], data["email"], data["zipcode"])
         db.session.add(lead)
         db.session.commit()
         db.session.close()
@@ -94,6 +97,18 @@ def clientinfo():
 @application.route("/host")
 def host():
     return request.host
+
+
+@application.route("/a/<restaurant>/award/<awardCode>/share", methods=['POST'])
+def shareAward(restaurant, awardCode):
+    for i in range(1, 4):
+        print i
+        name = request.form.get("name{0}".format(i), "")
+        email = request.form.get("email{0}".format(i), "")
+        print name
+        print email
+    return "yum"
+
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
 def viewAward(restaurant, awardCode):
@@ -115,7 +130,8 @@ def viewAward(restaurant, awardCode):
 
     if awd.customers is None:
         if request.method == "GET":
-            return render_template('pre_award.html', maxCustomers=off.max_customers,updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
+            return render_template('pre_award.html', maxCustomers=off.max_customers,
+                                   updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
         if request.method == "POST":
             cust = int(request.form.get("customers", 0))
             name = request.form.get("name", "")
@@ -126,7 +142,8 @@ def viewAward(restaurant, awardCode):
                 awd.email = email
                 db.session.commit()
             else:
-                return render_template('pre_award.html', maxCustomers=off.max_customers, updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
+                return render_template('pre_award.html', maxCustomers=off.max_customers,
+                                       updateURL="/a/{0}/award/{1}".format(restaurant, awardCode))
 
     hours = ""
     if res.bf_start is not None and res.bf_end is not None:
@@ -134,13 +151,13 @@ def viewAward(restaurant, awardCode):
     if res.lu_start is not None and res.lu_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
-        hours = "{0}{1} - {2}".format(hours,res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
+        hours = "{0}{1} - {2}".format(hours, res.lu_start.strftime("%-I:%M %p"), res.lu_end.strftime("%-I:%M %p"))
     if res.di_start is not None and res.di_end is not None:
         if hours != "":
             hours = "{0} / ".format(hours)
-        hours = "{0}{1} - {2}".format(hours,res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
+        hours = "{0}{1} - {2}".format(hours, res.di_start.strftime("%-I:%M %p"), res.di_end.strftime("%-I:%M %p"))
 
-    data={
+    data = {
         "minPercent": off.min_offer_percent,
         "maxPercent": off.min_offer_percent + off.off_peak_bonus + off.random_offer_bonus,
         "startDate": off.valid_start_date.strftime("%-m/%-d/%y"),
@@ -148,11 +165,11 @@ def viewAward(restaurant, awardCode):
         "peakPercent": off.min_offer_percent,
         "offPeakPercent": off.min_offer_percent + off.off_peak_bonus,
         "hours": hours,
-        "customers":awd.customers,
+        "customers": awd.customers,
         "status": awd.status
     }
     if awd.status == "REDEEMED":
-        data["discount"]= awd.offer_percent
+        data["discount"] = awd.offer_percent
         data["redemptionDate"] = convertUTCToTimezone(awd.redemption_ts, res.timezone).date().strftime("%-m/%-d/%y")
         data["redemptionTime"] = convertUTCToTimezone(awd.redemption_ts, res.timezone).time().strftime("%-I:%M %p")
 
@@ -177,10 +194,11 @@ def QRCode(restaurant, awardCode):
         return ""
 
     img_buf = cStringIO.StringIO()
-    img = qrcode.make("http://www.yumsapp.com/r/{0}/redemption/{1}".format(restaurant,awardCode))
+    img = qrcode.make("http://www.yumsapp.com/r/{0}/redemption/{1}".format(restaurant, awardCode))
     img.save(img_buf)
     img_buf.seek(0)
     return send_file(img_buf, mimetype='image/png')
+
 
 @application.route("/r/signin", methods=['GET', 'POST'])
 def signIn():
@@ -207,6 +225,7 @@ def signIn():
             return redirect("/r/signin")
     return render_template("signin.html", path="/r/signin")
 
+
 @application.route("/r/signout")
 def signOut():
     if "restaurant" in session:
@@ -216,15 +235,16 @@ def signOut():
     session["loggedIn"] = False
     return redirect("/")
 
+
 @application.route("/r/<restaurant>")
 def restaurantMain(restaurant):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
     if "restaurant" not in session or "loggedIn" not in session:
         return redirect("/r/signin")
 
-    #List all awards
+    # List all awards
     data = []
-    offers = Offer.query.filter_by(restaurant_code = restaurant).all()
+    offers = Offer.query.filter_by(restaurant_code=restaurant).all()
     res = Restaurant.query.filter_by(code=restaurant).first()
     for offer in offers:
         awards = Award.query.filter_by(restaurant_code=restaurant, offer_code=offer.code).all()
@@ -235,6 +255,7 @@ def restaurantMain(restaurant):
     db.session.close()
 
     return render_template("restaurant_main.html", data=data, restaurant=res)
+
 
 @application.route("/r/<restaurant>/offer/<offerCode>/issueaward")
 def issueRestaurantAward(restaurant, offerCode):
@@ -284,9 +305,9 @@ def viewRestaurantAward(restaurant, awardCode):
     if awd is None or res is None:
         return render_template("message.html", message="This offer is not valid in this establishment.")
 
-    message =request.args.get("message",None)
+    message = request.args.get("message", None)
     db.session.close()
-    return render_template("award_details.html", award = awd, restaurant=res, message=message)
+    return render_template("award_details.html", award=awd, restaurant=res, message=message)
 
 
 @application.route("/r/<restaurant>/redemption/<awardCode>")
@@ -309,13 +330,15 @@ def redeemOffer(restaurant, awardCode):
 
     if awd.status == "REDEEMED":
         dt = convertUTCToTimezone(awd.redemption_ts, res.timezone)
-        return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode, "This award has already been processed in the past. The award details are shown here."))
+        return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode,
+                                                              "This award has already been processed in the past. The award details are shown here."))
 
     now = convertUTCToTimezone(datetime.utcnow(), res.timezone)
 
     # Check to see if the award is currently valid based on the start and end dates
     if now.date() < off.valid_start_date or now.date() > off.valid_end_date:
-        return "This offer is not currently valid.  This offer is only valid from {0} to {1}.".format(off.valid_start_date.strftime("%-m/%-d/%y"), off.valid_end_date.strftime("%-m/%-d/%y"))
+        return "This offer is not currently valid.  This offer is only valid from {0} to {1}.".format(
+            off.valid_start_date.strftime("%-m/%-d/%y"), off.valid_end_date.strftime("%-m/%-d/%y"))
 
     # Offer is valid.  Now let us set up all the offer details
 
@@ -341,7 +364,7 @@ def redeemOffer(restaurant, awardCode):
     print "Minimum Offer % : {0}".format(off.min_offer_percent)
     print "Offpeak Bonus % : {0}".format(off.off_peak_bonus)
     print "Random Offer Bonus % : {0}".format(off.random_offer_bonus)
-    bonus = random.randrange(0, off.random_offer_bonus+1)
+    bonus = random.randrange(0, off.random_offer_bonus + 1)
     print "Bonus {0}".format(bonus)
 
     offerValue = off.min_offer_percent
@@ -356,7 +379,7 @@ def redeemOffer(restaurant, awardCode):
     db.session.commit()
     db.session.close()
 
-    return redirect("/r/{0}/award/{1}?message={2}".format(restaurant,awardCode,"Award has been accepted"))
+    return redirect("/r/{0}/award/{1}?message={2}".format(restaurant, awardCode, "Award has been accepted"))
 
 
 @application.route('/', methods=['GET', 'POST'])
