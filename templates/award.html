@@ -1,6 +1,25 @@
 {% extends "base.html" %} {% import 'macros.html' as macros %}
 {% block content %}
 <style>
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:active
+    .btn-primary:focus {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+
+    .modal-dialog {
+        min-height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: auto;
+        @media(max-width: 768px) {
+            min-height: calc(100vh - 20px);
+        }
+    }
+
     table.bg {
         background: #a6c5c7;
         padding: 10px;
@@ -32,56 +51,129 @@
     }
 
 </style>
-<TABLE CLASS="bg">
-    <TR>
-        <TD COLSPAN="2" WIDTH="100%">
-            <img src="/static/{{ restaurant }}.png" width="100%">
-        </TD>
-    </TR>
-    <TR bgcolor="#35908b">
-        <TD WIDTH="79.3%" valign="middle" align="center">
-            <div class="offerHeader">
-                {{ data.minPercent }}% - {{ data.maxPercent }}% OFF
-            </div>
-            <div class="offerHeader2">
-                ENTIRE BILL FOR PARTY OF {{ data.customers }}
-            </div>
-            <div class="offerHeader3">
-                Valid {{ data.startDate }} - {{ data.endDate }}
-            </div>
-            {% if data.status == "REDEEMED" %}
-                <BR>
-            <div class="offerHeader3" style="color: blue; background:white">
-                This offer was redeemed on {{ data.redemptionDate }} at {{ data.redemptionTime }}.  Discount offered was {{ data.discount }}%.
-            </div>
-            {% endif %}
-        </TD>
-        <TD  ALIGN="RIGHT">
-            <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}" width="100%">
-        </TD>
-    </TR>
-    <TR>
-        <TD colspan="2">
-            <div class="offerHeader3" style="margin-left: 3vw;">
-                UPON ARRIVAL, get code scanned to determine discount. Discounts beyond minimum amounts below are granted randomly.<BR>
-                <li class="indentation">
-                    <B>{{data.peakPercent}}% MINIMUM: {{ data.hours }}<BR>
-                </li>
-                <li class="indentation">
-                    <B>{{data.offPeakPercent}}% MINIMUM: All other times</B>
-                </li>
-                <div align="center">
-                    <B>Cannot be combined with other offers</B>
+    <TABLE CLASS="bg">
+        <TR>
+            <TD COLSPAN="2" WIDTH="100%">
+                <img src="/static/{{ restaurant }}.png" width="100%">
+            </TD>
+        </TR>
+        <TR bgcolor="#35908b">
+            <TD WIDTH="79.3%" valign="middle" align="center">
+                <div class="offerHeader">
+                    {{ data.minPercent }}% - {{ data.maxPercent }}% OFF
                 </div>
+                <div class="offerHeader2">
+                    ENTIRE BILL FOR PARTY OF {{ data.customers }}
+                </div>
+                <div class="offerHeader3">
+                    Valid {{ data.startDate }} - {{ data.endDate }}
+                </div>
+                {% if data.status == "REDEEMED" %}
+                    <BR>
+                <div class="offerHeader3" style="color: blue; background:white">
+                    This offer was redeemed on {{ data.redemptionDate }} at {{ data.redemptionTime }}.  Discount offered was {{ data.discount }}%.
+                </div>
+                {% endif %}
+            </TD>
+            <TD  ALIGN="RIGHT">
+                <img src="/a/{{ restaurant }}/qrcode/{{ awardCode }}" width="100%">
+            </TD>
+        </TR>
+        <TR>
+            <TD colspan="2">
+                <div class="offerHeader3" style="margin-left: 3vw;">
+                    UPON ARRIVAL, get code scanned to determine discount. Discounts beyond minimum amounts below are granted randomly.<BR>
+                    <li class="indentation">
+                        <B>{{data.peakPercent}}% MINIMUM: {{ data.hours }}<BR>
+                    </li>
+                    <li class="indentation">
+                        <B>{{data.offPeakPercent}}% MINIMUM: All other times</B>
+                    </li>
+                    <div align="center">
+                        <B>Cannot be combined with other offers</B>
+                    </div>
+                </div>
+            </TD>
+        </TR>
+        <TR bgcolor="#35908b">
+            <TD colspan="2">
+                <div class="offerFooter" align="center">
+                    <a href="/" class="text-reset" target="_blank">Offer brought to you by YumsApp™ Sign-up at https://www.yumsapp.com</a>
+                </div>
+            </TD>
+        </TR>
+    </TABLE>
+
+
+    <div class="container-fluid py-5">
+        <div class="d-flex justify-content-center">
+            <div class="p-4">
+                <div class="h4 text-center font-italic pt-4 pb-2">
+                    Know others that might enjoy this offer?  Share it with them:
+                </div>
+
+                <form action="/a/{{  restaurant }}/award/{{ awardCode }}/share" target="_blank" method="post">
+
+                    <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name1" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name1"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email1" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email1"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name2" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name2"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email2" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email2"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name3" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name3"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email3" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email3"/>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex justify-content-around mt-3 mb-3">
+                        <div class="col-sm p-0">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary btn-lg btn-block text-white shadow">SHARE NOW</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
             </div>
-        </TD>
-    </TR>
-    <TR bgcolor="#35908b">
-        <TD colspan="2">
-            <div class="offerFooter" align="center">
-                <a href="/" class="text-reset" target="_blank">Offer brought to you by YumsApp™ Sign-up at https://www.yumsapp.com</a>
-            </div>
-        </TD>
-    </TR>
-</TABLE>
+        </div>
+    </div>
+
 {% endblock %}

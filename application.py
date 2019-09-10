@@ -1,15 +1,16 @@
 from flask import render_template, request, send_file, session, redirect, flash
 from application import db
 from application.models import Restaurant, Offer, Award, RestaurantLead, ConsumerLead
+from app import application
+from coupon_encoder import CouponEncoder
+from yumsapp.core.utils import convertUTCToTimezone
+from yumsapp.aws.smtp import sendEmail
 from datetime import datetime
 import qrcode
 import cStringIO
 import random
 import re
-from app import application
-from coupon_encoder import CouponEncoder
-from yumsapp.core.utils import convertUTCToTimezone
-from yumsapp.aws.smtp import sendEmail
+import json
 
 
 
@@ -95,20 +96,23 @@ def clientinfo():
         return render_template("message.html", message="Thank you very much. We will be contacting you shortly!")
 
 
-@application.route("/host")
-def host():
-    return request.host
-
-
 @application.route("/a/<restaurant>/award/<awardCode>/share", methods=['POST'])
 def shareAward(restaurant, awardCode):
+    data = {
+        "restaurant": restaurant,
+        "awardCode": awardCode
+    }
     for i in range(1, 4):
-        print i
-        name = request.form.get("name{0}".format(i), "")
-        email = request.form.get("email{0}".format(i), "")
-        print name
-        print email
-    return "yum"
+        data["name{0}".format(i)] = request.form.get("name{0}".format(i), "")
+        data["email{0}".format(i)] = request.form.get("email{0}".format(i), "")
+
+    #print json.dumps(data)
+
+    #return render_template("email_templates/award_referral_html.html", data=data)
+    sendEmail("team@yumsapp.com", "YumsApp Leads", "team@yumsapp.com", "Award Referrals!",
+              render_template("email_templates/award_referral_text.html", data=data),
+              render_template("email_templates/award_referral_html.html", data=data))
+    return redirect("/a/{0}/award/{1}".format(restaurant,awardCode))
 
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])

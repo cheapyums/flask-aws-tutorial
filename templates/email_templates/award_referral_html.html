@@ -1,0 +1,119 @@
+{% extends "base.html" %} {% import 'macros.html' as macros %}
+{% block content %}
+<style>
+    .btn-primary,
+    .btn-primary:hover,
+    .btn-primary:active
+    .btn-primary:focus {
+        background-color: #ffc107 !important;
+        border-color: #ffc107 !important;
+    }
+
+    .modal-dialog {
+        min-height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: auto;
+        @media(max-width: 768px) {
+            min-height: calc(100vh - 20px);
+        }
+    }
+
+    table.bg {
+        background: #a6c5c7;
+        padding: 10px;
+        border-spacing: 10px;
+    }
+
+    div.offerHeader {
+        font-size: 6vw;
+        color: white;
+        font-weight: bolder;
+    }
+    div.offerHeader2{
+        font-size: 3vw;
+        color: white;
+        font-weight: bolder;
+    }
+    div.offerHeader3{
+        font-size: 2vw;
+        color: black;
+        font-weight: bolder;
+    }
+    li.indentation{
+        margin-left: 3vw;
+    }
+    div.offerFooter{
+        font-size: 1.5vw;
+        color: white;
+        font-weight: bolder;
+    }
+
+</style>
+
+    <div class="container-fluid py-5">
+        <div class="d-flex justify-content-center">
+            <div class="p-4">
+                <div class="h4 text-center font-italic pt-4 pb-2">
+                    The following people were referred from
+                    <a href="http://www.yumsapp.com/a/{{  data.restaurant }}/award/ {{ data.awardCode }}">
+                        this award
+                    </a>
+                </div>
+
+                <form>
+
+                    <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name1" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name1" value="{{ data.name1 }}"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email1" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email1" value="{{ data.email1 }}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name2" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name2" value="{{ data.name2 }}"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email2" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email2" value="{{ data.email2 }}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                     <div class="d-flex">
+                        <div class="col-4-sm">
+                            <div class="form-group">
+                                <label for="name3" class="h6 text-secondary">NAME:</label>
+                                <input type="text" class="form-control" name="name3" value="{{ data.name3 }}"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm pr-0">
+                            <div class="form-group">
+                                <label for="email3" class="h6 text-secondary">EMAIL:</label>
+                                <input type="email" class="form-control" name="email3" value="{{ data.email3 }}"/>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
