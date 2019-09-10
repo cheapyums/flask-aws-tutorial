@@ -1,0 +1,61 @@
+{% extends "base.html" %} {% import 'macros.html' as macros %}
+{% block content %}
+
+    <style>
+        .btn-primary,
+        .btn-primary:hover,
+        .btn-primary:active
+        .btn-primary:focus {
+            background-color: #ffc107 !important;
+            border-color: #ffc107 !important;
+        }
+
+        .modal-dialog {
+              min-height: calc(100vh - 60px);
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              overflow: auto;
+              @media(max-width: 768px) {
+                min-height: calc(100vh - 20px);
+              }
+        }
+
+    </style>
+
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-11 col-lg-9 col-xl-7">
+                <div class="h3 text-center pt-4 pb-2">
+                    A Consumer Lead has been received!
+                </div>
+
+                <form>
+                    <div class="d-flex justify-content-around">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="name" class="h6 text-secondary">NAME</label>
+                                <input type="text" VALUE="{{ data.name }}" class="form-control" name="name" aria-describedby="nameHelp">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="zipcode" class="h6 text-secondary">ZIP CODE</label>
+                                <input type="text" VALUE="{{ data.zipcode }}" class="form-control" name="zipcode" aria-describedby="zipcodeHelp">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="email" class="h6 text-secondary">EMAIL</label>
+                                <input type="email" VALUE="{{ data.email }}" class="form-control" name="email" aria-describedby="emailtHelp">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -12,10 +12,6 @@ from yumsapp.core.utils import convertUTCToTimezone
 from yumsapp.aws.smtp import sendEmail
 
 
-# @application.route("/tst")
-# def tst():
-#    return render_template("test.html")
-
 
 @application.route("/act", methods=['GET', 'POST'])
 def info():
@@ -91,6 +87,11 @@ def clientinfo():
         db.session.add(lead)
         db.session.commit()
         db.session.close()
+
+        sendEmail("team@yumsapp.com", "YumsApp Leads", "team@yumsapp.com", "New Consumer Lead!",
+                  render_template("email_templates/consumer_lead_text.html", data=data),
+                  render_template("email_templates/consumer_lead_html.html", data=data))
+
         return render_template("message.html", message="Thank you very much. We will be contacting you shortly!")
 
 
