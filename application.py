@@ -96,7 +96,7 @@ def clientinfo():
         return render_template("message.html", message="Thank you very much. We will be contacting you shortly!")
 
 
-@application.route("/a/<restaurant>/award/<awardCode>/share", methods=['POST'])
+@application.route("/a/<restaurant>/award/<awardCode>/share", methods=['GET','POST'])
 def shareAward(restaurant, awardCode):
     data = {
         "restaurant": restaurant,
@@ -106,17 +106,17 @@ def shareAward(restaurant, awardCode):
         data["name{0}".format(i)] = request.form.get("name{0}".format(i), "")
         data["email{0}".format(i)] = request.form.get("email{0}".format(i), "")
 
-    #print json.dumps(data)
+    if request.method == "POST":
+        sendEmail("team@yumsapp.com", "YumsApp Leads", "team@yumsapp.com", "Award Referrals!",
+                  render_template("email_templates/award_referral_text.html", data=data),
+                  render_template("email_templates/award_referral_html.html", data=data))
+        return redirect("/a/{0}/award/{1}/share".format(restaurant,awardCode))
 
-    #return render_template("email_templates/award_referral_html.html", data=data)
-    sendEmail("team@yumsapp.com", "YumsApp Leads", "team@yumsapp.com", "Award Referrals!",
-              render_template("email_templates/award_referral_text.html", data=data),
-              render_template("email_templates/award_referral_html.html", data=data))
-    return redirect("/a/{0}/award/{1}".format(restaurant,awardCode))
+    return viewAward(restaurant, awardCode, "We will process your referrals shortly!")
 
 
 @application.route("/a/<restaurant>/award/<awardCode>", methods=['GET', 'POST'])
-def viewAward(restaurant, awardCode):
+def viewAward(restaurant, awardCode, message=None):
     db.session.connection(execution_options={'isolation_level': "READ COMMITTED"})
     awd = Award.query.filter_by(code=awardCode, restaurant_code=restaurant).first()
     if awd is None:
@@ -181,7 +181,8 @@ def viewAward(restaurant, awardCode):
     db.session.close()
     if request.method == "POST":
         return redirect("/a/{0}/award/{1}".format(restaurant, awardCode))
-    return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data)
+    
+    return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data, message=message)
 
 
 @application.route("/a/<restaurant>/qrcode/<awardCode>")
