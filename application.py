@@ -181,7 +181,7 @@ def viewAward(restaurant, awardCode, message=None):
     db.session.close()
     if request.method == "POST":
         return redirect("/a/{0}/award/{1}".format(restaurant, awardCode))
-    
+
     return render_template("award.html", restaurant=restaurant, awardCode=awardCode, data=data, message=message)
 
 
